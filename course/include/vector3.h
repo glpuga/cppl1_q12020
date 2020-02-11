@@ -42,14 +42,14 @@ class Vector3{
         }
 
         // Getters
-        double x() const;
-        double y() const;
-        double z() const;
+        inline double x() const {return x_;};
+        inline double y() const {return y_;};
+        inline double z() const {return z_;};
 
         // Setters
-        double& x();
-        double& y();
-        double& z();
+        inline double& x() {return x_;};
+        inline double& y() {return y_;};
+        inline double& z() {return z_;};
 
         // Computations
         double dot(const Vector3&) const;

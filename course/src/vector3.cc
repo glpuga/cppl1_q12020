@@ -82,32 +82,6 @@ bool ekumen::math::Vector3::operator != (const Vector3& v) const {
     return (x_ != v.x_) || (y_ != v.y_) || (z_ != v.z_);
 }
 
-// Getters
-double Vector3::x() const {
-    return x_;
-}
-
-double Vector3::y() const {
-    return y_;
-}
-
-double Vector3::z() const {
-    return z_;
-}
-
-// Setters
-double& Vector3::x() {
-    return x_;
-}
-
-double& Vector3::y() {
-    return y_;
-}
-
-double& Vector3::z() {
-    return z_;
-}
-
 // Computations
 double Vector3::dot(const Vector3& v) const {
     return (x_ * v.x_) + (y_ * v.y_) + (z_ * v.z_);
