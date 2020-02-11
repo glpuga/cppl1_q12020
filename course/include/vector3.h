@@ -3,7 +3,6 @@
 
 #include <cstdint>
 #include <iostream>
-#include <istream>
 #include <ostream>
 
 namespace ekumen {
@@ -33,10 +32,10 @@ class Vector3{
         Vector3& operator /= (const Vector3&);
         bool operator == (const Vector3&) const;
         bool operator != (const Vector3&) const;
-        //std::stringstream& operator << (std::stringstream&) const;
+        bool operator == (const std::initializer_list<double>& list) const;
+        bool operator != (const std::initializer_list<double>& list) const;
 
-        friend std::ostream& operator << (std::ostream& os, const Vector3& v)
-        {
+        friend std::ostream& operator << (std::ostream& os, const Vector3& v) {
             os << std::string("(x: ") << v.x() << ", y: " << v.y() << ", z: " << v.z() << ")";
             return os;
         }

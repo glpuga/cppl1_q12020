@@ -1,8 +1,5 @@
 #include <cmath>
 #include <cstdint>
-#include <iostream>
-#include <istream>
-#include <ostream>
 #include "vector3.h"
 
 namespace ekumen {
@@ -80,6 +77,32 @@ bool ekumen::math::Vector3::operator == (const Vector3& v) const {
 bool ekumen::math::Vector3::operator != (const Vector3& v) const {
     // introduce tolerance
     return (x_ != v.x_) || (y_ != v.y_) || (z_ != v.z_);
+}
+
+bool ekumen::math::Vector3::operator == (const std::initializer_list<double>& list) const {
+    //check list correct size (3)
+    //check for loops that avoids SIGSEGV
+    std::initializer_list<double>::iterator it;
+    int i;
+    for(it = list.begin(), i = 0; it != list.end();) {
+         if(*it++ != (*this)[i++]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool ekumen::math::Vector3::operator != (const std::initializer_list<double>& list) const {
+    //check list correct size (3)
+    //check for loops that avoids SIGSEGV
+    std::initializer_list<double>::iterator it;
+    int i;
+    for(it = list.begin(), i = 0; it != list.end();) {
+         if(*it++ != (*this)[i++]) {
+            return true;
+        }
+    }
+    return false;
 }
 
 // Computations
