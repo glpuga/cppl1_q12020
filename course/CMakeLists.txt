@@ -16,7 +16,7 @@ include_directories(
 # Library sources.
 set(LIBRARY_SOURCES
 	src/foo.cc
-	src/isometry.cc
+	src/Isometry.cc
 )
 
 # Library creation.
