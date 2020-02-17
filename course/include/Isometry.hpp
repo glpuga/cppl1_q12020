@@ -18,6 +18,7 @@
 #include <limits>
 #include <sstream>
 #include <string>
+#include <vector>
 
 namespace ekumen {
 namespace math {
@@ -90,6 +91,45 @@ inline std::ostream& operator<<(std::ostream& os, const Vector3& vect) {
               << ", y: " << std::to_string(static_cast<int>(vect.y()))
               << ", z: " << std::to_string(static_cast<int>(vect.z())) << ")";
 }
+
+class Matrix3 {
+   public:
+    Matrix3(const double m00, const double m01, const double m02, const double m10, const double m11, const double m13,
+            const double m21, const double m22, const double m23){
+                values_.push_back(m00);
+                values_.push_back(m01);
+                values_.push_back(m02);
+                values_.push_back(m10);
+                values_.push_back(m11);
+                values_.push_back(m13);
+                values_.push_back(m21);
+                values_.push_back(m22);
+                values_.push_back(m23);
+            }
+    Matrix3(const std::initializer_list<double>& row_1, const std::initializer_list<double>& row_2,
+            const std::initializer_list<double>& row_3){
+                for(auto i : row_1){
+                    values_.push_back(i);
+                }
+                for(auto i : row_2){
+                    values_.push_back(i);
+                }
+                for(auto i : row_3){
+                    values_.push_back(i);
+                }
+            }
+
+    // Operators
+    bool operator==(const Matrix3& a) const;
+    
+    // Static members
+    static const Matrix3 kIdentity;
+    static const Matrix3 kZero;
+
+   private:
+    std::vector<double> values_;
+
+};
 
 }  // namespace math
 }  // namespace ekumen

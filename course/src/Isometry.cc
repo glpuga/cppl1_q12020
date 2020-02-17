@@ -14,6 +14,8 @@
 
 namespace ekumen {
 namespace math {
+
+// Vector3
 Vector3::Vector3(const double& x, const double& y, const double& z) : x_(x), y_(y), z_(z) {}
 
 Vector3::Vector3() : Vector3(0.0, 0.0, 0.0) {}
@@ -91,6 +93,24 @@ const Vector3 Vector3::kUnitX(1.0, 0.0, 0.0);
 const Vector3 Vector3::kUnitY(0.0, 1.0, 0.0);
 const Vector3 Vector3::kUnitZ(0.0, 0.0, 1.0);
 const Vector3 Vector3::kZero(0.0, 0.0, 0.0);
+
+// Matrix3
+
+const Matrix3 Matrix3::kIdentity({1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0});
+const Matrix3 Matrix3::kZero({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, {0.0, 0.0, 0.0});
+
+bool Matrix3::operator==(const Matrix3& a) const {
+    auto it = values_.begin();
+    auto a_it = a.values_.begin();
+    for (uint8_t count = 0; count < values_.size(); ++count) {
+        if (!almost_equal(*a_it, *it, resolution)) {
+            return false;
+        }
+        ++it;
+        ++a_it;
+    }
+    return true;
+}
 
 }  // namespace math
 }  // namespace ekumen
