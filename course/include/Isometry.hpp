@@ -93,43 +93,64 @@ inline std::ostream& operator<<(std::ostream& os, const Vector3& vect) {
 }
 
 class Matrix3 {
+    using mat3 = std::vector<std::vector<double>>;
+
    public:
-    Matrix3(const double m00, const double m01, const double m02, const double m10, const double m11, const double m13,
-            const double m21, const double m22, const double m23){
-                values_.push_back(m00);
-                values_.push_back(m01);
-                values_.push_back(m02);
-                values_.push_back(m10);
-                values_.push_back(m11);
-                values_.push_back(m13);
-                values_.push_back(m21);
-                values_.push_back(m22);
-                values_.push_back(m23);
-            }
+    // Constructors
+    Matrix3(const double m00, const double m01, const double m02, const double m10, const double m11, const double m12,
+            const double m20, const double m21, const double m22);
     Matrix3(const std::initializer_list<double>& row_1, const std::initializer_list<double>& row_2,
-            const std::initializer_list<double>& row_3){
-                for(auto i : row_1){
-                    values_.push_back(i);
-                }
-                for(auto i : row_2){
-                    values_.push_back(i);
-                }
-                for(auto i : row_3){
-                    values_.push_back(i);
-                }
-            }
+            const std::initializer_list<double>& row_3);
+    Matrix3();
 
     // Operators
     bool operator==(const Matrix3& a) const;
-    
+    bool operator==(const std::initializer_list<double>& rhs) const;
+    Matrix3 operator+(const Matrix3& a) const;
+    Matrix3 operator-(const Matrix3& a) const;
+    Matrix3 operator*(const double& a) const;
+    Matrix3 operator*(const Matrix3& a) const;
+    Matrix3 operator/(const Matrix3& a) const;
+    const std::vector<double>& operator[](int val) const;
+    std::vector<double>& operator[](int val);
+
+    // Methods
+    double det();
+    Vector3 row(uint8_t row) const;
+    Vector3 col(uint8_t col) const;
+
     // Static members
     static const Matrix3 kIdentity;
     static const Matrix3 kZero;
+    static const Matrix3 kOnes;
 
    private:
-    std::vector<double> values_;
-
+    mat3 mat_;
 };
+
+// non-member binary operators
+
+inline Matrix3 operator*(const double scalar, const Matrix3& rhs) {
+    Matrix3 result;
+    for (uint32_t y = 0; y < 3; ++y) {
+        for (uint32_t x = 0; x < 3; ++x) {
+            result[x][y] = scalar * rhs[x][y];
+        }
+    }
+    return result;
+}
+
+inline std::ostream& operator<<(std::ostream& os, const Matrix3& mat) {
+    return os << "[[" << std::to_string(static_cast<int>(mat[0][0])) << ", "
+              << std::to_string(static_cast<int>(mat[0][1])) << ", " << std::to_string(static_cast<int>(mat[0][2]))
+              << "], "
+              << "[" << std::to_string(static_cast<int>(mat[1][0])) << ", "
+              << std::to_string(static_cast<int>(mat[1][1])) << ", " << std::to_string(static_cast<int>(mat[1][2]))
+              << "], "
+              << "[" << std::to_string(static_cast<int>(mat[2][0])) << ", "
+              << std::to_string(static_cast<int>(mat[2][1])) << ", " << std::to_string(static_cast<int>(mat[2][2]))
+              << "]]";
+}
 
 }  // namespace math
 }  // namespace ekumen

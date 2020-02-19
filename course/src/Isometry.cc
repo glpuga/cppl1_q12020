@@ -11,6 +11,8 @@
 
 // Challenge libraries.
 #include <Isometry.hpp>
+#include <array>
+#include <tuple>
 
 namespace ekumen {
 namespace math {
@@ -96,21 +98,154 @@ const Vector3 Vector3::kZero(0.0, 0.0, 0.0);
 
 // Matrix3
 
-const Matrix3 Matrix3::kIdentity({1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0});
-const Matrix3 Matrix3::kZero({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, {0.0, 0.0, 0.0});
+Matrix3::Matrix3(const std::initializer_list<double>& row_1, const std::initializer_list<double>& row_2,
+                 const std::initializer_list<double>& row_3) {
+    mat_.resize(3);
+    for (unsigned item = 0; item < 3; item++) {
+        mat_[item].resize(3, 0);
+    }
+    if ((row_1.size() < 3) || (row_2.size() < 3) || (row_3.size() < 3)) {
+        return;
+    }
+    auto it = row_1.begin();
+    mat_[0][0] = *it;
+    ++it;
+    mat_[0][1] = *it;
+    ++it;
+    mat_[0][2] = *it;
+    ++it;
+
+    it = row_2.begin();
+    mat_[1][0] = *it;
+    ++it;
+    mat_[1][1] = *it;
+    ++it;
+    mat_[1][2] = *it;
+    ++it;
+
+    it = row_3.begin();
+    mat_[2][0] = *it;
+    ++it;
+    mat_[2][1] = *it;
+    ++it;
+    mat_[2][2] = *it;
+    ++it;
+}
+Matrix3::Matrix3(const double m00, const double m01, const double m02, const double m10, const double m11,
+                 const double m12, const double m20, const double m21, const double m22)
+    : Matrix3{{m00, m01, m02}, {m10, m11, m12}, {m20, m21, m22}} {}
+
+Matrix3::Matrix3() : Matrix3{{0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}} {}
 
 bool Matrix3::operator==(const Matrix3& a) const {
-    auto it = values_.begin();
-    auto a_it = a.values_.begin();
-    for (uint8_t count = 0; count < values_.size(); ++count) {
-        if (!almost_equal(*a_it, *it, resolution)) {
-            return false;
+    for (auto x = 0; x < 3; ++x) {
+        for (auto y = 0; y < 3; ++y) {
+            if (!almost_equal(mat_[x][y], a[x][y], resolution)) {
+                return false;
+            }
         }
-        ++it;
-        ++a_it;
     }
     return true;
 }
+
+bool Matrix3::operator==(const std::initializer_list<double>& rhs) const {
+    if (rhs.size() < 9) {
+        return false;
+    }
+    auto it = rhs.begin();
+    for (auto x = 0; x < 3; ++x) {
+        for (auto y = 0; y < 3; ++y) {
+            if (!almost_equal(mat_[x][y], *it, resolution)) {
+                return false;
+            }
+            ++it;
+        }
+    }
+    return true;
+}
+
+Matrix3 Matrix3::operator+(const Matrix3& a) const {
+    Matrix3 result;
+    for (uint32_t x = 0; x < 3; ++x) {
+        for (uint32_t y = 0; y < 3; ++y) {
+            result[x][y] = mat_[x][y] + a.mat_[x][y];
+        }
+    }
+    return result;
+}
+
+Matrix3 Matrix3::operator-(const Matrix3& a) const {
+    Matrix3 result;
+    for (uint32_t x = 0; x < 3; ++x) {
+        for (uint32_t y = 0; y < 3; ++y) {
+            result[x][y] = mat_[x][y] - a.mat_[x][y];
+        }
+    }
+    return result;
+}
+
+Matrix3 Matrix3::operator*(const Matrix3& a) const {
+    Matrix3 result;
+    for (uint32_t x = 0; x < 3; ++x) {
+        for (uint32_t y = 0; y < 3; ++y) {
+            result[x][y] = a[x][y] * mat_[x][y];
+        }
+    }
+    return result;
+}
+
+Matrix3 Matrix3::operator*(const double& a) const {
+    Matrix3 result;
+    for (uint32_t x = 0; x < 3; ++x) {
+        for (uint32_t y = 0; y < 3; ++y) {
+            result[x][y] = a * mat_[x][y];
+        }
+    }
+    return result;
+}
+
+Matrix3 Matrix3::operator/(const Matrix3& a) const {
+    Matrix3 result;
+    for (uint32_t x = 0; x < 3; ++x) {
+        for (uint32_t y = 0; y < 3; ++y) {
+            result[x][y] = mat_[x][y] / a[x][y];
+        }
+    }
+    return result;
+}
+
+const std::vector<double>& Matrix3::operator[](int val) const {
+    if (val > 3) {
+        return mat_[3];
+    }
+    return mat_[val];
+}
+
+std::vector<double>& Matrix3::operator[](int val) { return mat_[val]; }
+
+double Matrix3::det() {
+    return ((mat_[0][0] * mat_[1][1] * mat_[2][2]) + (mat_[0][1] * mat_[1][2] * mat_[2][0]) +
+            (mat_[0][2] * mat_[1][0] * mat_[2][1]) - (mat_[0][2] * mat_[1][1] * mat_[2][0]) -
+            (mat_[0][0] * mat_[1][2] * mat_[2][1]) - (mat_[0][1] * mat_[1][0] * mat_[2][2]));
+}
+
+Vector3 Matrix3::row(uint8_t row) const {
+    if (row < 2) {
+        return Vector3(mat_[row][0], mat_[row][1], mat_[row][2]);
+    }
+    return Vector3(mat_[2][0], mat_[2][1], mat_[2][2]);
+}
+
+Vector3 Matrix3::col(uint8_t col) const {
+    if (col < 2) {
+        return Vector3(mat_[0][col], mat_[1][col], mat_[2][col]);
+    }
+    return Vector3(mat_[0][2], mat_[1][2], mat_[2][2]);
+}
+
+const Matrix3 Matrix3::kIdentity({1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0});
+const Matrix3 Matrix3::kZero({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, {0.0, 0.0, 0.0});
+const Matrix3 Matrix3::kOnes({1.0, 1.0, 1.0}, {1.0, 1.0, 1.0}, {1.0, 1.0, 1.0});
 
 }  // namespace math
 }  // namespace ekumen
