@@ -93,8 +93,6 @@ inline std::ostream& operator<<(std::ostream& os, const Vector3& vect) {
 }
 
 class Matrix3 {
-    using mat3 = std::vector<std::vector<double>>;
-
    public:
     // Constructors
     Matrix3(const double m00, const double m01, const double m02, const double m10, const double m11, const double m12,
@@ -102,8 +100,11 @@ class Matrix3 {
     Matrix3(const std::initializer_list<double>& row_1, const std::initializer_list<double>& row_2,
             const std::initializer_list<double>& row_3);
     Matrix3();
-
+    Matrix3(const Matrix3& mat);
+    Matrix3(Matrix3&& mat);
     // Operators
+    Matrix3& operator=(Matrix3&& mat);
+    Matrix3& operator=(const Matrix3& mat);
     bool operator==(const Matrix3& a) const;
     bool operator==(const std::initializer_list<double>& rhs) const;
     Matrix3 operator+(const Matrix3& a) const;
@@ -111,11 +112,11 @@ class Matrix3 {
     Matrix3 operator*(const double& a) const;
     Matrix3 operator*(const Matrix3& a) const;
     Matrix3 operator/(const Matrix3& a) const;
-    const std::vector<double>& operator[](int val) const;
-    std::vector<double>& operator[](int val);
+    const Vector3& operator[](int val) const;
+    Vector3& operator[](int val);
 
     // Methods
-    double det();
+    double det() const;
     Vector3 row(uint8_t row) const;
     Vector3 col(uint8_t col) const;
 
@@ -125,17 +126,15 @@ class Matrix3 {
     static const Matrix3 kOnes;
 
    private:
-    mat3 mat_;
+    std::vector<Vector3> mat_;
 };
 
 // non-member binary operators
 
 inline Matrix3 operator*(const double scalar, const Matrix3& rhs) {
     Matrix3 result;
-    for (uint32_t y = 0; y < 3; ++y) {
-        for (uint32_t x = 0; x < 3; ++x) {
-            result[x][y] = scalar * rhs[x][y];
-        }
+    for (auto idx = 0; idx < 3; ++idx) {
+            result[idx] = rhs[idx] * scalar;
     }
     return result;
 }

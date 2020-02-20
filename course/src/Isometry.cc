@@ -101,35 +101,23 @@ const Vector3 Vector3::kZero(0.0, 0.0, 0.0);
 Matrix3::Matrix3(const std::initializer_list<double>& row_1, const std::initializer_list<double>& row_2,
                  const std::initializer_list<double>& row_3) {
     mat_.resize(3);
-    for (unsigned item = 0; item < 3; item++) {
-        mat_[item].resize(3, 0);
-    }
     if ((row_1.size() < 3) || (row_2.size() < 3) || (row_3.size() < 3)) {
-        return;
+        throw "Size of the matrix isn't correct";
     }
     auto it = row_1.begin();
-    mat_[0][0] = *it;
-    ++it;
-    mat_[0][1] = *it;
-    ++it;
-    mat_[0][2] = *it;
-    ++it;
+    mat_[0][0] = *it++;
+    mat_[0][1] = *it++;
+    mat_[0][2] = *it++;
 
     it = row_2.begin();
-    mat_[1][0] = *it;
-    ++it;
-    mat_[1][1] = *it;
-    ++it;
-    mat_[1][2] = *it;
-    ++it;
+    mat_[1][0] = *it++;
+    mat_[1][1] = *it++;
+    mat_[1][2] = *it++;
 
     it = row_3.begin();
-    mat_[2][0] = *it;
-    ++it;
-    mat_[2][1] = *it;
-    ++it;
-    mat_[2][2] = *it;
-    ++it;
+    mat_[2][0] = *it++;
+    mat_[2][1] = *it++;
+    mat_[2][2] = *it++;
 }
 Matrix3::Matrix3(const double m00, const double m01, const double m02, const double m10, const double m11,
                  const double m12, const double m20, const double m21, const double m22)
@@ -137,12 +125,29 @@ Matrix3::Matrix3(const double m00, const double m01, const double m02, const dou
 
 Matrix3::Matrix3() : Matrix3{{0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}} {}
 
+Matrix3::Matrix3(const Matrix3& mat)
+    : Matrix3{mat[0][0], mat[0][1], mat[0][2], mat[1][0], mat[1][1], mat[1][2], mat[2][0], mat[2][1], mat[2][2]} {}
+
+Matrix3::Matrix3(Matrix3&& mat)
+    : Matrix3{mat[0][0], mat[0][1], mat[0][2], mat[1][0], mat[1][1], mat[1][2], mat[2][0], mat[2][1], mat[2][2]} {}
+
+Matrix3& Matrix3::operator=(Matrix3&& mat) {
+    mat_ = std::move(mat.mat_);
+    return *this;
+}
+
+Matrix3& Matrix3::operator=(const Matrix3& mat) {
+    // check for self-assignment
+    if (&mat == this) return *this;
+    // reuse storage when possible
+    mat_ = mat.mat_;
+    return *this;
+}
+
 bool Matrix3::operator==(const Matrix3& a) const {
-    for (auto x = 0; x < 3; ++x) {
-        for (auto y = 0; y < 3; ++y) {
-            if (!almost_equal(mat_[x][y], a[x][y], resolution)) {
-                return false;
-            }
+    for (auto idx = 0; idx < 3; ++idx) {
+        if (mat_[idx] != a[idx]) {
+            return false;
         }
     }
     return true;
@@ -153,12 +158,10 @@ bool Matrix3::operator==(const std::initializer_list<double>& rhs) const {
         return false;
     }
     auto it = rhs.begin();
-    for (auto x = 0; x < 3; ++x) {
-        for (auto y = 0; y < 3; ++y) {
-            if (!almost_equal(mat_[x][y], *it, resolution)) {
-                return false;
-            }
-            ++it;
+
+    for (auto idx = 0; idx < 3; ++idx) {
+        if (mat_[idx] != std::initializer_list<double>({*it++, *it++, *it++})) {
+            return false;
         }
     }
     return true;
@@ -166,64 +169,59 @@ bool Matrix3::operator==(const std::initializer_list<double>& rhs) const {
 
 Matrix3 Matrix3::operator+(const Matrix3& a) const {
     Matrix3 result;
-    for (uint32_t x = 0; x < 3; ++x) {
-        for (uint32_t y = 0; y < 3; ++y) {
-            result[x][y] = mat_[x][y] + a.mat_[x][y];
-        }
+    for (auto idx = 0; idx < 3; ++idx) {
+        result[idx] = mat_[idx] + a.mat_[idx];
     }
     return result;
 }
 
 Matrix3 Matrix3::operator-(const Matrix3& a) const {
     Matrix3 result;
-    for (uint32_t x = 0; x < 3; ++x) {
-        for (uint32_t y = 0; y < 3; ++y) {
-            result[x][y] = mat_[x][y] - a.mat_[x][y];
-        }
+    for (auto idx = 0; idx < 3; ++idx) {
+        result[idx] = mat_[idx] - a.mat_[idx];
     }
     return result;
 }
 
 Matrix3 Matrix3::operator*(const Matrix3& a) const {
     Matrix3 result;
-    for (uint32_t x = 0; x < 3; ++x) {
-        for (uint32_t y = 0; y < 3; ++y) {
-            result[x][y] = a[x][y] * mat_[x][y];
-        }
+    for (auto idx = 0; idx < 3; ++idx) {
+        result[idx] = mat_[idx] * a.mat_[idx];
     }
     return result;
 }
 
 Matrix3 Matrix3::operator*(const double& a) const {
     Matrix3 result;
-    for (uint32_t x = 0; x < 3; ++x) {
-        for (uint32_t y = 0; y < 3; ++y) {
-            result[x][y] = a * mat_[x][y];
-        }
+    for (auto idx = 0; idx < 3; ++idx) {
+        result[idx] = mat_[idx] * a;
     }
     return result;
 }
 
 Matrix3 Matrix3::operator/(const Matrix3& a) const {
     Matrix3 result;
-    for (uint32_t x = 0; x < 3; ++x) {
-        for (uint32_t y = 0; y < 3; ++y) {
-            result[x][y] = mat_[x][y] / a[x][y];
-        }
+    for (auto idx = 0; idx < 3; ++idx) {
+        result[idx] = mat_[idx] / a.mat_[idx];
     }
     return result;
 }
 
-const std::vector<double>& Matrix3::operator[](int val) const {
-    if (val > 3) {
-        return mat_[3];
+const Vector3& Matrix3::operator[](int val) const {
+    if (val > 2) {
+        return mat_[2];
     }
     return mat_[val];
 }
 
-std::vector<double>& Matrix3::operator[](int val) { return mat_[val]; }
+Vector3& Matrix3::operator[](int val) {
+    if (val > 2) {
+        return mat_[2];
+    }
+    return mat_[val];
+}
 
-double Matrix3::det() {
+double Matrix3::det() const {
     return ((mat_[0][0] * mat_[1][1] * mat_[2][2]) + (mat_[0][1] * mat_[1][2] * mat_[2][0]) +
             (mat_[0][2] * mat_[1][0] * mat_[2][1]) - (mat_[0][2] * mat_[1][1] * mat_[2][0]) -
             (mat_[0][0] * mat_[1][2] * mat_[2][1]) - (mat_[0][1] * mat_[1][0] * mat_[2][2]));
@@ -231,9 +229,9 @@ double Matrix3::det() {
 
 Vector3 Matrix3::row(uint8_t row) const {
     if (row < 2) {
-        return Vector3(mat_[row][0], mat_[row][1], mat_[row][2]);
+        return mat_[row];
     }
-    return Vector3(mat_[2][0], mat_[2][1], mat_[2][2]);
+    return mat_[2];
 }
 
 Vector3 Matrix3::col(uint8_t col) const {
