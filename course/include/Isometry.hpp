@@ -11,6 +11,9 @@
 
 #pragma once
 
+// Gtest
+#include "gtest/gtest.h"
+
 // Standard libraries
 #include <cmath>
 #include <initializer_list>
@@ -121,6 +124,7 @@ class Matrix3 {
     Vector3 col(uint8_t col) const;
 
     // Static members
+    static const Matrix3 RotateAround(const Vector3& axis, double angle);
     static const Matrix3 kIdentity;
     static const Matrix3 kZero;
     static const Matrix3 kOnes;
@@ -134,7 +138,7 @@ class Matrix3 {
 inline Matrix3 operator*(const double scalar, const Matrix3& rhs) {
     Matrix3 result;
     for (auto idx = 0; idx < 3; ++idx) {
-            result[idx] = rhs[idx] * scalar;
+        result[idx] = rhs[idx] * scalar;
     }
     return result;
 }
@@ -149,6 +153,68 @@ inline std::ostream& operator<<(std::ostream& os, const Matrix3& mat) {
               << "[" << std::to_string(static_cast<int>(mat[2][0])) << ", "
               << std::to_string(static_cast<int>(mat[2][1])) << ", " << std::to_string(static_cast<int>(mat[2][2]))
               << "]]";
+}
+
+inline Matrix3 matrix_multiplication(Matrix3 mat, Matrix3 rhs) {
+    Matrix3 result;
+    for (uint16_t row = 0; row < 3; ++row) {
+        for (uint16_t column = 0; column < 3; ++column) {
+            result[row][column] =
+                mat[row][0] * rhs[0][column] + mat[row][1] * rhs[1][column] + mat[row][2] * rhs[2][column];
+        }
+    }
+    return result;
+}
+
+class Isometry {
+   public:
+    Isometry(const Vector3& vect);
+    Isometry(const Matrix3& vect);
+    Isometry(const Vector3& vect, const Matrix3& mat);
+    Isometry(std::vector<Vector3> mat);
+
+    Isometry compose(const Isometry& isometry) const;
+    Isometry inverse() const;
+    Isometry rotation() const;
+    Vector3 transform(std::initializer_list<double> values) const;
+    Vector3 translation() const;
+
+    static const Isometry FromTranslation(const std::initializer_list<double>& values);
+    static const Isometry FromEulerAngles(double yaw, double pitch, double roll);
+    static const Isometry RotateAround(const Vector3& axis, double angle);
+
+    // Operators
+    bool operator==(const Isometry& a) const;
+    bool operator==(const Vector3& a) const;
+    Vector3 operator*(const Vector3& a) const;
+    Isometry operator*(const Isometry& a) const;
+    uint32_t row_;
+    uint32_t column_;
+    std::vector<Vector3> mat_;
+    Vector3 translation_;
+};
+
+inline ::testing::AssertionResult areAlmostEqual(const Isometry& lhs, const Isometry& rhs, const double tolerance) {
+    if ((lhs.column_ != rhs.column_) || (lhs.row_ != rhs.row_))
+        return ::testing::AssertionFailure() << "Size of matrixes are not equal";
+
+    for (uint16_t row = 0; row < lhs.row_; ++row) {
+        for (uint16_t column = 0; column < lhs.column_; ++column) {
+            if (!almost_equal(lhs.mat_[row][column], rhs.mat_[row][column], tolerance)) {
+                return ::testing::AssertionFailure() << "elements [" << row << " : " << column << " are not equal";
+            }
+        }
+    }
+
+    return ::testing::AssertionSuccess();
+}
+
+inline std::ostream& operator<<(std::ostream& os, const Isometry& iso) {
+    return os << "[T: (x: 0, y: 0, z: 0"
+              << "), R:[[" << std::setprecision(9) << iso.mat_[0][0] << ", " << iso.mat_[0][1] << ", " << iso.mat_[0][2]
+              << "], "
+              << "[" << iso.mat_[1][0] << ", " << iso.mat_[1][1] << ", " << iso.mat_[1][2] << "], "
+              << "[" << iso.mat_[2][0] << ", " << iso.mat_[2][1] << ", " << iso.mat_[2][2] << "]]]";
 }
 
 }  // namespace math
