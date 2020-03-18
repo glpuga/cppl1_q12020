@@ -10,14 +10,36 @@ namespace ekumen {
   const Vector3 Vector3::kUnitZ(0., 0., 1.);
   const Vector3 Vector3::kZero(0., 0., 0.);
 
-  Vector3 Vector3::operator += (const Vector3 & obj) const
+  Vector3 & Vector3::operator *= (const double & obj)
   {
-    return Vector3( x_ + obj.x(), y_ + obj.y(),z_ +  obj.z());
+    x_ *= obj;
+    y_ *= obj;
+    z_ *=  obj;
+    return *this;
   }
 
-  Vector3 Vector3::operator -= (const Vector3 & obj) const
+  Vector3 & Vector3::operator /= (const double & obj)
   {
-    return Vector3( x_ - obj.x(), y_ - obj.y(),z_ -  obj.z());
+    x_ /= obj;
+    y_ /= obj;
+    z_ /=  obj;
+    return *this;
+  }
+
+  Vector3 & Vector3::operator += (const Vector3 & obj)
+  {
+    x_ += obj.x();
+    y_ += obj.y();
+    z_ +=  obj.z();
+    return *this;
+  }
+
+  Vector3 & Vector3::operator -= (const Vector3 & obj)
+  {
+    x_ -= obj.x();
+    y_ -= obj.y();
+    z_ -=  obj.z();
+    return *this;
   }
 
   bool Vector3::operator == (const std::initializer_list<double> & obj) const
@@ -26,7 +48,12 @@ namespace ekumen {
     {
       throw std::runtime_error("Size of list not valid");
     }
-    if ( (obj.begin()[0] != x_) || (obj.begin()[1] != y_) || (obj.begin()[2] != z_) )
+    auto it = obj.begin();
+    double x_list, y_list, z_list;
+    x_list = *it++;
+    y_list = *it++;
+    z_list = *it;
+    if ( (x_list != x_) || (y_list != y_) || (z_list != z_) )
     {
       return false;
     }
@@ -42,26 +69,21 @@ namespace ekumen {
     return true;
   }
 
-  Vector3 Vector3::operator *= (const Vector3 & obj) const
+  Vector3 & Vector3::operator *= (const Vector3 & obj)
   {
-    return Vector3(x_ * obj.x(), y_ * obj.y(), z_ * obj.z());
+    x_ *= obj.x();
+    y_ *= obj.y();
+    z_ *=  obj.z();
+    return *this;
   }
 
-  Vector3 Vector3::operator /= (const Vector3 & obj) const
+  Vector3 & Vector3::operator /= (const Vector3 & obj)
   {
-    return Vector3(x_ / obj.x(), y_ / obj.y(), z_ / obj.z());
+    x_ /= obj.x();
+    y_ /= obj.y();
+    z_ /=  obj.z();
+    return *this;
   }
-
-  Vector3 Vector3::operator *= (const double & obj) const
-  {
-    return Vector3(x_ * obj, y_ * obj, z_ * obj);
-  }
-
-  Vector3 Vector3::operator /= (const double & obj) const
-  {
-    return Vector3(x_ / obj, y_ / obj, z_ / obj);
-  }
-
 
   double Vector3::norm() const
   {
@@ -99,9 +121,18 @@ namespace ekumen {
     {
       throw std::runtime_error("Index not valid");
     }
-    else if (index == 0) return x_;
-    else if (index == 1) return y_;
-    else return z_;
+    else if (index == 0)
+    {
+      return x_;
+    }
+    else if (index == 1)
+    {
+      return y_;
+    }
+    else
+    {
+      return z_;
+    }
   }
 
   Vector3 Vector3::cross(const Vector3 & obj) const
