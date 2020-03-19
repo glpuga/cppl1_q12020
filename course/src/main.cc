@@ -1,15 +1,14 @@
 #include <iostream>
-
-#include "foo.h"
+#include "isometry.h"
 
 int main(int argc, char **argv) {
   (void) argc;
   (void) argv;
 
-  std::cout << "Hello world." << std::endl;
+  ekumen::math::Vector3 v1{1., 2., 3.};
+  const ekumen::math::Vector3 q{4., 5., 6.};
 
-  const cppcourse::Foo f(1);
-  std::cout << "Foo: " << f.string() << std::endl;
-
+  v1 += q;
+  std::cout << v1 << std::endl;
   return 0;
 }
