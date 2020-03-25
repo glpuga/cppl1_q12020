@@ -96,7 +96,6 @@ class Matrix3 {
     Vector3 operator [] (const int index) const;
     Vector3 & operator [] (const int index);
     double det() const;
-    Matrix3 dot(const Matrix3 & obj) const;
     friend std::ostream& operator << (std::ostream & os, const Matrix3 & v) {
               os << std::string("[[") << v[0][0] << ", " << v[0][1] << ", " << v[0][2] << "], [";
               os << v[1][0] << ", " << v[1][1] << ", " << v[1][2] << "], [";
