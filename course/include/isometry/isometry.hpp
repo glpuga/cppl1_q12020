@@ -6,6 +6,7 @@
 #include <sstream>
 #include <cmath>
 #include <iostream>
+#include <iomanip>
 
 namespace ekumen {
   namespace math {
@@ -92,21 +93,51 @@ class Matrix3 {
     Matrix3 & operator /= (const double & obj);
     Matrix3 operator * (const double & obj) const {return Matrix3(*this) *= obj;};
     Matrix3 operator / (const double & obj) const {return Matrix3(*this) /= obj;};
-    Vector3 operator * (const Vector3 & obj);
+    Vector3 operator * (const Vector3 & obj) const;
     Vector3 operator [] (const int index) const;
     Vector3 & operator [] (const int index);
     double det() const;
+    Matrix3 inverse() const;
     friend std::ostream& operator << (std::ostream & os, const Matrix3 & v) {
+              os << std::setprecision(9);
               os << std::string("[[") << v[0][0] << ", " << v[0][1] << ", " << v[0][2] << "], [";
               os << v[1][0] << ", " << v[1][1] << ", " << v[1][2] << "], [";
               os << v[2][0] << ", " << v[2][1] << ", " << v[2][2] << "]]";
               return os;
-          }; //TODO INCREASE NUMBERS TO 4 DECIMALS
+          };
   private:
     Vector3 row1_, row2_, row3_;
 };
 
 Matrix3 operator * (const double & obj1, const Matrix3 & obj2);
+
+class Isometry {
+  public:
+    Isometry(const Vector3 & translation, const Matrix3 & rotation): translation_(translation), rotation_(rotation) {};
+    Isometry(const Isometry & obj): translation_(obj.translation()), rotation_(obj.rotation()) {};
+    static Isometry FromTranslation(const Vector3 & translation){return Isometry(translation, Matrix3::kIdentity);};
+    static Isometry RotateAround(const Vector3 & translation, double angle);
+    static Isometry FromEulerAngles(double roll, double pitch, double yaw);
+
+    const Matrix3 & rotation() const {return rotation_;};
+    const Vector3 & translation() const {return translation_;};
+
+    bool operator == (const Isometry & obj) const;
+    Vector3 operator * (const Vector3 & obj) const;
+    Isometry operator *= (const Isometry & obj);
+    Isometry operator * (const Isometry & obj) const {return Isometry(*this) *= obj;};
+    Vector3 transform(const Vector3 & obj) const;
+    Isometry inverse() const;
+    Isometry compose(const Isometry & obj) const {return Isometry(*this) *= obj;};
+
+    friend std::ostream& operator << (std::ostream & os, const Isometry & v) {
+              os << std::string("[T: ") << v.translation() << ", R:" << v.rotation() << "]";
+              return os;
+          };
+  private:
+    Vector3 translation_;
+    Matrix3 rotation_;
+};
 
 }  // math
 }  // ekumen
