@@ -5,7 +5,6 @@ include_directories(
 
 # Test sources.
 set (GTEST_SOURCES
-	foo_TEST.cc
 	isometry_TEST.cc
 )
 

@@ -3,8 +3,8 @@
 // needed to implement an isometry.
 
 // Consider including other header files if needed.
-#include "isometry.h"
-
+//#include "isometry.h"
+#include "Vector3.h"
 #include <cmath>
 #include <sstream>
 #include <string>
@@ -13,35 +13,30 @@
 
 namespace ekumen {
 namespace math {
+namespace cppcourse {
 namespace test {
 namespace {
 
 GTEST_TEST(Vector3Test, Vector3Operations) {
   const double kTolerance{1e-12};
-  Vector3 t();
- 
-}
-
-/*
-GTEST_TEST(Vector3Test, Vector3Operations) {
-  const double kTolerance{1e-12};
   const Vector3 p{1., 2., 3.};
   const Vector3 q{4., 5., 6.};
-
-  EXPECT_EQ(p + q, {5., 7., 9.});
-  EXPECT_EQ(p - q, {-3., -3., -3.});
+  EXPECT_EQ(p + q, Vector3(5., 7., 9.));  
+  EXPECT_EQ(p - q, Vector3(-3., -3., -3.));
   EXPECT_EQ(p * 2., Vector3(2., 4., 6));
   EXPECT_EQ(2 * q, Vector3(8., 10., 12.));
   EXPECT_EQ(p * q, Vector3(4., 10., 18.));
   EXPECT_EQ(p / q, Vector3(.25, .4, .5));
   EXPECT_NEAR(p.norm(), 3.7416573867739413, kTolerance);
+  
   EXPECT_EQ(p.x(), 1.);
   EXPECT_EQ(p.y(), 2.);
   EXPECT_EQ(p.z(), 3.);
   EXPECT_EQ(p[0], 1.);
   EXPECT_EQ(p[1], 2.);
   EXPECT_EQ(p[2], 3.);
-
+  
+  /*
   std::stringstream ss;
   ss << p;
   EXPECT_EQ(ss.str(), "(x: 1, y: 2, z: 3)");
@@ -58,8 +53,9 @@ GTEST_TEST(Vector3Test, Vector3Operations) {
   t[1] = 2.;
   t.z() = 3.;
   EXPECT_EQ(t, p);
+  */
 }
-*/
+
 /*
 GTEST_TEST(Matrix3Test, Matrix3Operations) {
   const double kTolerance{1e-12};
@@ -140,8 +136,9 @@ GTEST_TEST(IsometryTest, IsometryOperations) {
   EXPECT_EQ(ss.str(), "[T: (x: 0, y: 0, z: 0), R:[[0.923879533, -0.382683432, 0], [0.382683432, 0.923879533, 0], [0, 0, 1]]]");
 }
 */
-}  // namespace
+}
 }  // namespace test
+}  // namespace cppcourse
 }  // namespace math
 }  // namespace ekumen
 

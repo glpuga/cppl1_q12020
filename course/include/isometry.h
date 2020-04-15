@@ -1,9 +1,9 @@
 #ifndef ISOMETRY_H
 #define	ISOMETRY_H
 
-namespace ekumen {
+namespace cppcourse {
 
-class Vector3 {
+/*class Vector3 {
  public:
   explicit Vector3(int value) : value_(value) {}
   int value() const { return value_; }
@@ -11,7 +11,7 @@ class Vector3 {
  private:
   const int value_{};
 };
-
+*/
 }  // cppcourse
 
 #endif
