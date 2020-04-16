@@ -1,5 +1,6 @@
 #ifndef VECTOR3_H
 #define	VECTOR3_H
+#include <iostream>
 #include "math.h"
 
 namespace ekumen {
@@ -76,6 +77,13 @@ double Vector3::operator[](int index) const{
          break;
    }
 }
+
+std::ostream& operator<<(std::ostream& os, const Vector3& p)
+{
+    os << "(x: " << p.x() << ", y: " << p.y() << ", z: " << p.z() << ")";
+    return os;
+}
+
 
 }  // cppcourse
 
