@@ -71,4 +71,15 @@ double Vector3::operator[](int index) const
         break;
     }
 }
+
+    void Vector3::kUnitX(){
+
+    }
+    void Vector3::kUnitY(){
+
+    }
+    void Vector3::kUnitZ(){
+        
+    }
+
 } // namespace ekumen

@@ -6,6 +6,8 @@
 namespace ekumen
 {
 
+
+
 class Vector3
 {
 public:
@@ -17,6 +19,7 @@ public:
 
     double norm() const;
 
+
     //operator overload
     double operator[](int index) const;
     friend Vector3 operator+(const Vector3 &p, const Vector3 &q);
@@ -27,6 +30,9 @@ public:
     friend Vector3 operator/(const Vector3 &p, const Vector3 &q);
     friend bool operator==(const Vector3 &p, const Vector3 &q);
     friend std::ostream &operator<<(std::ostream &os, const Vector3 &p);
+
+    constexpr k = Vector3(1., 1., 0);
+    
 
 private:
     const double x_;
