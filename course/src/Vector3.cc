@@ -71,22 +71,21 @@ std::ostream &operator<<(std::ostream &os, const Vector3 &p)
     return os;
 }
 
-double Vector3::operator[](int index) const
+const double& Vector3::operator[](int index) const
 {
-    if (index < 3)
+    switch (index)
     {
-        switch (index)
-        {
-        case 0:
-            return (&x_)[index];
-        case 1:
-            return (&y_)[index];
-        case 2:
-            return (&z_)[index];
-        default:
-            break;
-        }
+    case 0:
+        return x_;
+    case 1:
+        return y_;
+    case 2:
+        return z_;
+    default:
+        break;
     }
+
+    return (&x_)[index];
 }
 
 const Vector3 Vector3::kUnitX = Vector3(1., 0., 0.);
