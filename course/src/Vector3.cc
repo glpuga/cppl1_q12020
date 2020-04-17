@@ -13,10 +13,14 @@ double Vector3::dot(const Vector3 &q) const
     return ((x_ * q.x()) + (y_ * q.y()) + (z_ * q.z()));
 }
 
-Vector3 Vector3::cross(Vector3 &q) const
+Vector3 Vector3::cross(const Vector3 &q) const
 {
+    //Vector3 r;
+    //r[0] = y_*q.z() - z_*q.y();
+    //r[1] = z_*q.x() - x_*q.z();
+    //r[2] = x_*q.y() - y_*q.x();
     //not implemented
-    return (Vector3::kZero); //only for shutdown warning
+    return (Vector3(y_ * q.z() - z_ * q.y(), z_ * q.x() - x_ * q.z(), x_ * q.y() - y_ * q.x())); //only for shutdown warning
 }
 
 Vector3 operator+(const Vector3 &p, const Vector3 &q)
@@ -71,7 +75,7 @@ std::ostream &operator<<(std::ostream &os, const Vector3 &p)
     return os;
 }
 
-const double& Vector3::operator[](int index) const
+const double &Vector3::operator[](int index) const
 {
     switch (index)
     {
@@ -88,9 +92,26 @@ const double& Vector3::operator[](int index) const
     return (&x_)[index];
 }
 
+double &Vector3::operator[](int index)
+{
+    switch (index)
+    {
+    case 0:
+        return x_;
+    case 1:
+        return y_;
+    case 2:
+        return z_;
+    default:
+        break;
+    }
+
+    return x_;
+}
+
 const Vector3 Vector3::kUnitX = Vector3(1., 0., 0.);
 const Vector3 Vector3::kUnitY = Vector3(0., 1., 0.);
-const Vector3 Vector3::kUnitZ = Vector3(0., 1., 0.);
+const Vector3 Vector3::kUnitZ = Vector3(0., 0., 1.);
 const Vector3 Vector3::kZero = Vector3(0., 0., 0.);
 
 } // namespace ekumen

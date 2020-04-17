@@ -14,13 +14,15 @@ public:
     double x() const { return x_; }
     double y() const { return y_; }
     double z() const { return z_; }
-    
+        
     double norm() const;
     double dot(const Vector3 &q) const;
-    Vector3 cross(Vector3 &q) const;
+    Vector3 cross(const Vector3 &q) const;
     //operator overload
     const double& operator[](int index) const;
+    double& operator[](int index);    
     
+
     friend Vector3 operator+(const Vector3 &p, const Vector3 &q);
     friend Vector3 operator-(const Vector3 &p, const Vector3 &q);
     friend Vector3 operator*(const double &cte, const Vector3 &p);

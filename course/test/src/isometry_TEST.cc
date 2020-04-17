@@ -48,7 +48,8 @@ GTEST_TEST(Vector3Test, Vector3Operations) {
   //EXPECT_TRUE(Vector3::kUnitX != {1., 1., 0.});
   //EXPECT_TRUE(Vector3::kUnitY == {0., 1., 0.});
   
-  //EXPECT_TRUE(Vector3::kUnitZ == Vector3::kUnitX.cross(Vector3::kUnitY));
+  
+  EXPECT_TRUE(Vector3::kUnitZ == Vector3::kUnitX.cross(Vector3::kUnitY));
   EXPECT_NEAR(Vector3::kUnitX.dot(Vector3::kUnitZ), 0., kTolerance);
 
   Vector3 t;
@@ -57,6 +58,11 @@ GTEST_TEST(Vector3Test, Vector3Operations) {
   //t[1] = 2.;
   //t.z() = 3.;
   //EXPECT_EQ(t, p);
+
+  t[0] = 1.;
+  t[1] = 2.;
+  t[2] = 3.;
+  EXPECT_EQ(t, p);
   
 }
 
