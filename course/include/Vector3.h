@@ -1,5 +1,4 @@
-#ifndef VECTOR3_H
-#define VECTOR3_H
+#pragma once
 #include <iostream>
 #include "math.h"
 
@@ -19,8 +18,8 @@ public:
     double dot(const Vector3 &q) const;
     Vector3 cross(const Vector3 &q) const;
     //operator overload
-    const double& operator[](int index) const;
-    double& operator[](int index);    
+    const double& operator[](const int index) const;
+    double& operator[](const int index);    
     
 
     friend Vector3 operator+(const Vector3 &p, const Vector3 &q);
@@ -45,5 +44,3 @@ private:
 };
 
 } // namespace ekumen
-
-#endif

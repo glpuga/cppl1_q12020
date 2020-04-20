@@ -5,7 +5,8 @@ namespace ekumen
 
 double Vector3::norm() const
 {
-    return sqrt((x_ * x_) + (y_ * y_) + (z_ * z_));
+    return sqrt(dot(Vector3(x(),y(),z())));
+    
 }
 
 double Vector3::dot(const Vector3 &q) const
@@ -75,7 +76,7 @@ std::ostream &operator<<(std::ostream &os, const Vector3 &p)
     return os;
 }
 
-const double &Vector3::operator[](int index) const
+const double &Vector3::operator[](const int index) const
 {
     switch (index)
     {
@@ -92,7 +93,7 @@ const double &Vector3::operator[](int index) const
     return (&x_)[index];
 }
 
-double &Vector3::operator[](int index)
+double &Vector3::operator[](const int index)
 {
     switch (index)
     {

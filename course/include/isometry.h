@@ -1,9 +1,5 @@
-#ifndef ISOMETRY_H
-#define	ISOMETRY_H
-
+#pragma once
 namespace cppcourse {
 
 
 }  // cppcourse
-
-#endif
