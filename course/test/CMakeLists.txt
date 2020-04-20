@@ -39,7 +39,7 @@ macro (cppcourse_build_tests)
     add_executable(${BINARY_NAME} ${GTEST_SOURCE_file})
 
     add_dependencies(${BINARY_NAME}
-    	foo
+      foo
     	gtest
     	gtest_main
     )
