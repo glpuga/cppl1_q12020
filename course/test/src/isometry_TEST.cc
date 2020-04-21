@@ -8,6 +8,7 @@
 #include <cmath>
 #include <sstream>
 #include <string>
+#include <initializer_list>
 
 #include "gtest/gtest.h"
 
@@ -22,8 +23,8 @@ GTEST_TEST(Vector3Test, Vector3Operations) {
   const Vector3 p{1., 2., 3.};
   const Vector3 q{4., 5., 6.};
 
-  //EXPECT_EQ(p + q, {5., 7., 9.});
-  //EXPECT_EQ(p - q, {-3., -3., -3.});
+//  EXPECT_EQ(p + q, std::initializer_list({5., 7., 9.}));
+//  EXPECT_EQ(p - q, std::initializer_list({-3., -3., -3.}));
   EXPECT_EQ(p * 2., Vector3(2., 4., 6));
   EXPECT_EQ(2 * q, Vector3(8., 10., 12.));
   EXPECT_EQ(p * q, Vector3(4., 10., 18.));
@@ -45,24 +46,19 @@ GTEST_TEST(Vector3Test, Vector3Operations) {
   EXPECT_TRUE(Vector3::kUnitX != Vector3(1., 1., 0.));
   EXPECT_TRUE(Vector3::kUnitY == Vector3(0., 1., 0.));
 
-  //EXPECT_TRUE(Vector3::kUnitX != {1., 1., 0.});
-  //EXPECT_TRUE(Vector3::kUnitY == {0., 1., 0.});
-  
-  
+  //EXPECT_TRUE(Vector3::kUnitX != {1., 1., 0});
+  //EXPECT_TRUE(Vector3::kUnitY == (std::initializer_list({0., 1., 0})));
+    
   EXPECT_TRUE(Vector3::kUnitZ == Vector3::kUnitX.cross(Vector3::kUnitY));
   EXPECT_NEAR(Vector3::kUnitX.dot(Vector3::kUnitZ), 0., kTolerance);
 
   Vector3 t;
   EXPECT_EQ(t, Vector3::kZero);
-  //t.x() = 1.;
-  //t[1] = 2.;
-  //t.z() = 3.;
-  //EXPECT_EQ(t, p);
-
-  t[0] = 1.;
+  t.x() = 1.;
   t[1] = 2.;
-  t[2] = 3.;
+  t.z() = 3.;
   EXPECT_EQ(t, p);
+
   
 }
 

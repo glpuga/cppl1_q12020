@@ -8,12 +8,20 @@ namespace ekumen
 class Vector3
 {
 public:
-    explicit Vector3(double x, double y, double z) : x_(x), y_(y), z_(z) {}
-    explicit Vector3() : x_(0.0), y_(0.0), z_(0.0) {}
-    double x() const { return x_; }
-    double y() const { return y_; }
-    double z() const { return z_; }
-        
+    explicit Vector3();
+    explicit Vector3(const double x, const double y, const double z);
+
+    double x() const {return values[0];}
+    double &x() {return values[0];}
+    
+    double y() const { return values[1]; }
+    double &y() {return values[1];}
+
+    double z() const { return values[2]; }
+    double &z() {return values[2];}
+
+
+
     double norm() const;
     double dot(const Vector3 &q) const;
     Vector3 cross(const Vector3 &q) const;
@@ -22,6 +30,7 @@ public:
     double& operator[](const int index);    
     
 
+    //Vector3 operator+(const Vector3 &q);
     friend Vector3 operator+(const Vector3 &p, const Vector3 &q);
     friend Vector3 operator-(const Vector3 &p, const Vector3 &q);
     friend Vector3 operator*(const double &cte, const Vector3 &p);
@@ -30,7 +39,7 @@ public:
     friend Vector3 operator/(const Vector3 &p, const Vector3 &q);
     friend bool operator==(const Vector3 &p, const Vector3 &q);
     friend bool operator!=(const Vector3 &p, const Vector3 &q);
-    //friend bool operator!=(const Vector3 &p, const Vector3 &q);
+   
     friend std::ostream &operator<<(std::ostream &os, const Vector3 &p);     
 
     static const Vector3 kUnitX;
@@ -38,9 +47,9 @@ public:
     static const Vector3 kUnitZ;
     static const Vector3 kZero;
 private:
-    double x_;
-    double y_;
-    double z_;
+
+    double *values = new double[3];
+
 };
 
 } // namespace ekumen

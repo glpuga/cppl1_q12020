@@ -3,27 +3,46 @@
 namespace ekumen
 {
 
+Vector3::Vector3(const double x, const double y, const double z)
+{
+    values[0] = x;
+    values[1] = y;
+    values[2] = z;
+}
+Vector3::Vector3()
+{
+    values[0] = 0.;
+    values[1] = 0.;
+    values[2] = 0.;
+}
+
 double Vector3::norm() const
 {
-    return sqrt(dot(Vector3(x(),y(),z())));
-    
+    return sqrt(dot(Vector3(x(), y(), z())));
 }
 
 double Vector3::dot(const Vector3 &q) const
 {
-    return ((x_ * q.x()) + (y_ * q.y()) + (z_ * q.z()));
+    return ((values[0] * q.x()) + (values[1] * q.y()) + (values[2] * q.z()));
 }
 
 Vector3 Vector3::cross(const Vector3 &q) const
 {
-    //Vector3 r;
-    //r[0] = y_*q.z() - z_*q.y();
-    //r[1] = z_*q.x() - x_*q.z();
-    //r[2] = x_*q.y() - y_*q.x();
-    //not implemented
-    return (Vector3(y_ * q.z() - z_ * q.y(), z_ * q.x() - x_ * q.z(), x_ * q.y() - y_ * q.x())); //only for shutdown warning
+    Vector3 r;
+    r.x() = values[1] * q.z() - values[2] * q.y();
+    r.y() = values[2] * q.x() - values[0] * q.z();
+    r.z() = values[0] * q.y() - values[1] * q.x();
+    return (r);
 }
 
+
+/*Vector3 Vector3::operator+(const Vector3 &q){
+    Vector3 res;
+    res.x() = this->x() + q.x();
+    res.y() = this->y() + q.y();
+    res.y() = this->z() + q.z();
+    return(res);
+}*/
 Vector3 operator+(const Vector3 &p, const Vector3 &q)
 {
     Vector3 res(p.x() + q.x(), p.y() + q.y(), p.z() + q.z());
@@ -65,6 +84,7 @@ bool operator==(const Vector3 &p, const Vector3 &q)
     bool res = (p.x() == q.x()) && (p.y() == q.y()) && (p.z() == q.z());
     return res;
 }
+
 bool operator!=(const Vector3 &p, const Vector3 &q)
 {
 
@@ -78,36 +98,26 @@ std::ostream &operator<<(std::ostream &os, const Vector3 &p)
 
 const double &Vector3::operator[](const int index) const
 {
-    switch (index)
+    try
     {
-    case 0:
-        return x_;
-    case 1:
-        return y_;
-    case 2:
-        return z_;
-    default:
-        break;
+        return values[index];
     }
-
-    return (&x_)[index];
+    catch (const std::exception &ex)
+    {
+        std::cerr << "Error occurred: " << ex.what() << std::endl;
+    }
 }
 
 double &Vector3::operator[](const int index)
 {
-    switch (index)
+    try
     {
-    case 0:
-        return x_;
-    case 1:
-        return y_;
-    case 2:
-        return z_;
-    default:
-        break;
+        return values[index];
     }
-
-    return x_;
+    catch (const std::exception &ex)
+    {
+        std::cerr << "Error occurred: " << ex.what() << std::endl;
+    }
 }
 
 const Vector3 Vector3::kUnitX = Vector3(1., 0., 0.);
