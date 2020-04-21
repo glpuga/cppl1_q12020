@@ -23,8 +23,8 @@ GTEST_TEST(Vector3Test, Vector3Operations) {
   const Vector3 p{1., 2., 3.};
   const Vector3 q{4., 5., 6.};
 
-//  EXPECT_EQ(p + q, std::initializer_list({5., 7., 9.}));
-//  EXPECT_EQ(p - q, std::initializer_list({-3., -3., -3.}));
+  EXPECT_EQ(p + q, std::initializer_list({5., 7., 9.}));
+  EXPECT_EQ(p - q, std::initializer_list({-3., -3., -3.}));
   EXPECT_EQ(p * 2., Vector3(2., 4., 6));
   EXPECT_EQ(2 * q, Vector3(8., 10., 12.));
   EXPECT_EQ(p * q, Vector3(4., 10., 18.));

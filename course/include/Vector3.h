@@ -29,8 +29,6 @@ public:
     const double& operator[](const int index) const;
     double& operator[](const int index);    
     
-
-    //Vector3 operator+(const Vector3 &q);
     friend Vector3 operator+(const Vector3 &p, const Vector3 &q);
     friend Vector3 operator-(const Vector3 &p, const Vector3 &q);
     friend Vector3 operator*(const double &cte, const Vector3 &p);
@@ -40,12 +38,14 @@ public:
     friend bool operator==(const Vector3 &p, const Vector3 &q);
     friend bool operator!=(const Vector3 &p, const Vector3 &q);
    
-    friend std::ostream &operator<<(std::ostream &os, const Vector3 &p);     
+    friend std::ostream &operator<<(std::ostream &os, const Vector3 &p);
+         
 
     static const Vector3 kUnitX;
     static const Vector3 kUnitY;
     static const Vector3 kUnitZ;
     static const Vector3 kZero;
+
 private:
 
     double *values = new double[3];

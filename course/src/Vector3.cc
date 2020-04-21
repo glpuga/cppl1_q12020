@@ -36,13 +36,6 @@ Vector3 Vector3::cross(const Vector3 &q) const
 }
 
 
-/*Vector3 Vector3::operator+(const Vector3 &q){
-    Vector3 res;
-    res.x() = this->x() + q.x();
-    res.y() = this->y() + q.y();
-    res.y() = this->z() + q.z();
-    return(res);
-}*/
 Vector3 operator+(const Vector3 &p, const Vector3 &q)
 {
     Vector3 res(p.x() + q.x(), p.y() + q.y(), p.z() + q.z());
@@ -90,6 +83,7 @@ bool operator!=(const Vector3 &p, const Vector3 &q)
 
     return (!(p == q));
 }
+
 std::ostream &operator<<(std::ostream &os, const Vector3 &p)
 {
     os << "(x: " << p.x() << ", y: " << p.y() << ", z: " << p.z() << ")";
