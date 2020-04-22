@@ -17,16 +17,13 @@ namespace math {
 namespace cppcourse {
 namespace test {
 namespace {
-
 GTEST_TEST(Vector3Test, Vector3Operations) {
   const double kTolerance{1e-12};
   const Vector3 p{1., 2., 3.};
   const Vector3 q{4., 5., 6.};
 
-  //EXPECT_EQ(p + q, std::initializer_list({5., 7., 9.}));
-  //EXPECT_EQ(p - q, std::initializer_list({-3., -3., -3.}));
-  EXPECT_EQ(p + q, Vector3(5., 7., 9.));
-  EXPECT_EQ(p - q, Vector3(-3., -3., -3.));
+  EXPECT_EQ(p + q, std::initializer_list<double>({5., 7., 9.}));
+  EXPECT_EQ(p - q, std::initializer_list<double>({-3., -3., -3.}));
   EXPECT_EQ(p * 2., Vector3(2., 4., 6));
   EXPECT_EQ(2 * q, Vector3(8., 10., 12.));
   EXPECT_EQ(p * q, Vector3(4., 10., 18.));
@@ -39,18 +36,13 @@ GTEST_TEST(Vector3Test, Vector3Operations) {
   EXPECT_EQ(p[1], 2.);
   EXPECT_EQ(p[2], 3.);
 
-
   std::stringstream ss;
   ss << p;
   EXPECT_EQ(ss.str(), "(x: 1, y: 2, z: 3)");
-  EXPECT_TRUE(Vector3::kUnitX == Vector3(1., 0., 0.));
 
-  EXPECT_TRUE(Vector3::kUnitX != Vector3(1., 1., 0.));
-  EXPECT_TRUE(Vector3::kUnitY == Vector3(0., 1., 0.));
-
-  //EXPECT_TRUE(Vector3::kUnitX != {1., 1., 0});
-  //EXPECT_TRUE(Vector3::kUnitY == (std::initializer_list({0., 1., 0})));
-    
+  EXPECT_TRUE(Vector3::kUnitX == Vector3(1., 0., 0));
+  EXPECT_TRUE(Vector3::kUnitX != std::initializer_list<double>({1., 1., 0}));
+  EXPECT_TRUE(Vector3::kUnitY == std::initializer_list<double>({0., 1., 0}));
   EXPECT_TRUE(Vector3::kUnitZ == Vector3::kUnitX.cross(Vector3::kUnitY));
   EXPECT_NEAR(Vector3::kUnitX.dot(Vector3::kUnitZ), 0., kTolerance);
 
@@ -60,8 +52,6 @@ GTEST_TEST(Vector3Test, Vector3Operations) {
   t[1] = 2.;
   t.z() = 3.;
   EXPECT_EQ(t, p);
-
-  
 }
 
 /*

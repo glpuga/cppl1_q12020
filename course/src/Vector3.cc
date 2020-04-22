@@ -15,7 +15,11 @@ Vector3::Vector3()
     values[1] = 0.;
     values[2] = 0.;
 }
-
+Vector3::Vector3(const std::initializer_list<double> &list){
+    values[0] = *(list.begin() + 0);
+    values[1] = *(list.begin() + 1);
+    values[2] = *(list.begin() + 2);
+}
 double Vector3::norm() const
 {
     return sqrt(dot(Vector3(x(), y(), z())));
@@ -97,10 +101,21 @@ bool operator==(const Vector3 &p, const Vector3 &q)
     return res;
 }
 
+bool operator==(const Vector3 &p, const std::initializer_list<double> &list){
+    bool res = (p.x() == *(list.begin() + 0)) && (p.y() == *(list.begin() + 1)) && (p.z() == *(list.begin() + 2));
+    return res;
+}
+
 bool operator!=(const Vector3 &p, const Vector3 &q)
 {
 
     return (!(p == q));
+}
+
+bool operator!=(const Vector3 &p, const std::initializer_list<double> &list){
+    Vector3 q(*(list.begin() + 0),*(list.begin() + 1),*(list.begin() + 2));
+return (!(p == q));
+
 }
 
 std::ostream &operator<<(std::ostream &os, const Vector3 &p)

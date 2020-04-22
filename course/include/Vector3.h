@@ -10,6 +10,7 @@ class Vector3
 public:
     explicit Vector3();
     explicit Vector3(const double x, const double y, const double z);    
+    Vector3(const std::initializer_list<double> &list);
 
     double x() const {return values[0];}
     double &x() {return values[0];}
@@ -40,7 +41,10 @@ public:
     friend Vector3 operator/(const Vector3 &p, const Vector3 &q);
     
     friend bool operator==(const Vector3 &p, const Vector3 &q);
+    friend bool operator==(const Vector3 &p, const std::initializer_list<double> &list);
+
     friend bool operator!=(const Vector3 &p, const Vector3 &q);
+    //friend bool operator!=(const Vector3 &p, const std::initializer_list<double> &list);
    
     friend std::ostream &operator<<(std::ostream &os, const Vector3 &p);
          
