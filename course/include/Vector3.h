@@ -44,7 +44,7 @@ public:
     friend bool operator==(const Vector3 &p, const std::initializer_list<double> &list);
 
     friend bool operator!=(const Vector3 &p, const Vector3 &q);
-    //friend bool operator!=(const Vector3 &p, const std::initializer_list<double> &list);
+    friend bool operator!=(const Vector3 &p, const std::initializer_list<double> &list);
    
     friend std::ostream &operator<<(std::ostream &os, const Vector3 &p);
          
