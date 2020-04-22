@@ -35,17 +35,36 @@ Vector3 Vector3::cross(const Vector3 &q) const
     return (r);
 }
 
-
-Vector3 operator+(const Vector3 &p, const Vector3 &q)
-{
-    Vector3 res(p.x() + q.x(), p.y() + q.y(), p.z() + q.z());
-    return res;
+Vector3 &Vector3::operator+=(const Vector3 q){
+    x() += q.x();
+    y() += q.y();
+    z() += q.z();
+    return *this;
 }
 
-Vector3 operator-(const Vector3 &p, const Vector3 &q)
+Vector3 &Vector3::operator-=(const Vector3 q){
+    x() -= q.x();
+    y() -= q.y();
+    z() -= q.z();
+    return *this;
+}
+
+Vector3 operator+(Vector3 p, Vector3 q)
+{   
+    Vector3 r;    
+    r.x() = p.x();
+    r.y() = p.y();
+    r.z() = p.z();
+    return (r+=q);
+}
+
+Vector3 operator-(Vector3 p, Vector3 q)
 {
-    Vector3 res(p.x() - q.x(), p.y() - q.y(), p.z() - q.z());
-    return res;
+    Vector3 r;    
+    r.x() = p.x();
+    r.y() = p.y();
+    r.z() = p.z();
+    return (r-=q);
 }
 
 Vector3 operator*(const double &cte, const Vector3 &p)

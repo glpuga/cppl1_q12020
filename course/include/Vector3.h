@@ -9,7 +9,7 @@ class Vector3
 {
 public:
     explicit Vector3();
-    explicit Vector3(const double x, const double y, const double z);
+    explicit Vector3(const double x, const double y, const double z);    
 
     double x() const {return values[0];}
     double &x() {return values[0];}
@@ -29,12 +29,16 @@ public:
     const double& operator[](const int index) const;
     double& operator[](const int index);    
     
-    friend Vector3 operator+(const Vector3 &p, const Vector3 &q);
-    friend Vector3 operator-(const Vector3 &p, const Vector3 &q);
+    
+    Vector3 &operator+=(const Vector3 q);
+    Vector3 &operator-=(const Vector3 q);
+    
+    
     friend Vector3 operator*(const double &cte, const Vector3 &p);
     friend Vector3 operator*(const Vector3 &p, const double &cte);
     friend Vector3 operator*(const Vector3 &p, const Vector3 &q);
     friend Vector3 operator/(const Vector3 &p, const Vector3 &q);
+    
     friend bool operator==(const Vector3 &p, const Vector3 &q);
     friend bool operator!=(const Vector3 &p, const Vector3 &q);
    
@@ -51,5 +55,9 @@ private:
     double *values = new double[3];
 
 };
+
+Vector3 operator+(Vector3 p, Vector3 q);
+Vector3 operator-(Vector3 p, Vector3 q);
+
 
 } // namespace ekumen
