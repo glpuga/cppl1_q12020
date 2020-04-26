@@ -17,6 +17,7 @@ include_directories(
 set(LIBRARY_SOURCES
 	src/foo.cc
 	src/Vector3.cc
+	src/Matrix3.cc
 )
 
 # Library creation.

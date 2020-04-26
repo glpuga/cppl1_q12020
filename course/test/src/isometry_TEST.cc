@@ -4,12 +4,14 @@
 
 // Consider including other header files if needed.
 //#include "isometry.h"
-#include "Vector3.h"
+
 #include <cmath>
 #include <sstream>
 #include <string>
 #include <initializer_list>
 
+#include "Vector3.h"
+#include "Matrix3.h"
 #include "gtest/gtest.h"
 
 namespace ekumen {
@@ -54,7 +56,8 @@ GTEST_TEST(Vector3Test, Vector3Operations) {
   EXPECT_EQ(t, p);
 }
 
-/*
+//TODO Pasar constantes a constexpr
+//TODO cambiar KOnes
 GTEST_TEST(Matrix3Test, Matrix3Operations) {
   const double kTolerance{1e-12};
   Matrix3 m1{{1., 2., 3.}, {4., 5., 6.}, {7., 8., 9.}};
@@ -65,7 +68,7 @@ GTEST_TEST(Matrix3Test, Matrix3Operations) {
   EXPECT_EQ(m1 - m2, Matrix3::kZero);
   EXPECT_EQ(m1 + m2, m1 * 2.);
   EXPECT_EQ(m1 + m2, 2. * m2);
-  EXPECT_EQ(m1 * m2, {1.,  4.,  9., 16., 25., 36., 49., 64., 81.});
+  EXPECT_EQ(m1 * m2, std::initializer_list<double>({1.,  4.,  9., 16., 25., 36., 49., 64., 81.}));
   EXPECT_EQ(m1 / m2, Matrix3::kOnes);
   EXPECT_NEAR(m1.det(), 0., kTolerance);
   m1[2][2] = 10.;
@@ -98,7 +101,6 @@ GTEST_TEST(Matrix3Test, Matrix3Operations) {
     ASSERT_TRUE(found);
   }
 }
-*/
 
 /*
 GTEST_TEST(IsometryTest, IsometryOperations) {
