@@ -5,19 +5,30 @@ namespace ekumen
 
 Matrix3::Matrix3()
 {
-    row_values[0] = Vector3::kZero;
-    row_values[1] = Vector3::kZero;
-    row_values[2] = Vector3::kZero;
+    row(0) = Vector3::kZero;
+    row(1) = Vector3::kZero;
+    row(2) = Vector3::kZero;
 }
-Matrix3::Matrix3(const Vector3 f1, const Vector3 f2, const Vector3 f3)
+Matrix3::Matrix3(const Vector3 &f1, const Vector3 &f2, const Vector3 &f3)
 {
-    row_values[0] = f1;
-    row_values[1] = f2;
-    row_values[2] = f3;
+    row(0) = f1;
+    row(1) = f2;
+    row(2) = f3;
 }
 Matrix3::Matrix3(const std::initializer_list<double> &list)
 {
-    size_t c = 0;
+    //TODO Pasar a vector
+    int i = 0, j = 0;
+    for (const auto &v : list)
+    {
+        row_values[i][j] = v;
+        if (j++ == 2)
+        {
+            i++;
+            j = 0;
+        }
+    }
+    /*
     for (size_t i = 0; i < 3; i++)
     {
         for (size_t j = 0; j < 3; j++)
@@ -26,13 +37,13 @@ Matrix3::Matrix3(const std::initializer_list<double> &list)
             c++;
         }
     }
+    */
 }
 Matrix3::Matrix3(const std::initializer_list<double> &r0, const std::initializer_list<double> &r1, const std::initializer_list<double> &r2)
 {
-    //modificar
-    row_values[0] = Vector3(*(r0.begin() + 0), *(r0.begin() + 1), *(r0.begin() + 2));
-    row_values[1] = Vector3(*(r1.begin() + 0), *(r1.begin() + 1), *(r1.begin() + 2));
-    row_values[2] = Vector3(*(r2.begin() + 0), *(r2.begin() + 1), *(r2.begin() + 2));
+    row(0) = Vector3(r0);
+    row(1) = Vector3(r1);
+    row(2) = Vector3(r2);
 }
 
 Matrix3::Matrix3(const Matrix3 &m)
@@ -46,22 +57,21 @@ Matrix3::~Matrix3() {}
 
 double Matrix3::det() const
 {
-
     Vector3 i = row(0);
     Vector3 j = row(1).cross(row(2));
     return (i.x() * j.x() + i.y() * j.y() + i.z() * j.z());
 }
 
-Vector3 &Matrix3::row(const int index) const
-{
+Vector3 &Matrix3::row(const int &index) const
+{ //todo Agregar try catch
     return (row_values[index]);
 }
-Vector3 &Matrix3::row(const int index)
-{
+Vector3 &Matrix3::row(const int &index)
+{ //todo Agregar try catch
     return (row_values[index]);
 }
 
-Vector3 Matrix3::col(const int index) const
+Vector3 Matrix3::col(const int &index) const
 {
 
     try
@@ -76,10 +86,10 @@ Vector3 Matrix3::col(const int index) const
     {
         std::cerr << "Error occurred: " << ex.what() << std::endl;
     }
-    return(Vector3::kZero);
+    return (Vector3::kZero);
 }
 
-Vector3 Matrix3::col(const int index)
+Vector3 Matrix3::col(const int &index)
 {
     try
     {
@@ -93,14 +103,13 @@ Vector3 Matrix3::col(const int index)
     {
         std::cerr << "Error occurred: " << ex.what() << std::endl;
     }
-    return(Vector3::kZero);
+    return (Vector3::kZero);
 }
 
-const Vector3 &Matrix3::operator[](const int index) const
+const Vector3 &Matrix3::operator[](const int &index) const
 {
     try
     {
-        //return (row(index));
         return (row_values[index]);
     }
     catch (const std::exception &ex)
@@ -109,7 +118,7 @@ const Vector3 &Matrix3::operator[](const int index) const
     }
 }
 
-Vector3 &Matrix3::operator[](const int index)
+Vector3 &Matrix3::operator[](const int &index)
 {
     try
     {
@@ -220,6 +229,6 @@ std::ostream &operator<<(std::ostream &os, const Matrix3 &p)
 
 const Matrix3 Matrix3::kIdentity = Matrix3(Vector3::kUnitX, Vector3::kUnitY, Vector3::kUnitZ);
 const Matrix3 Matrix3::kZero = Matrix3(Vector3::kZero, Vector3::kZero, Vector3::kZero);
-const Matrix3 Matrix3::kOnes = Matrix3(Vector3(1., 1., 1), Vector3(1., 1., 1), Vector3(1., 1., 1));
-
+const Matrix3 Matrix3::kOnes = Matrix3(Vector3::kOnes, Vector3::kOnes, Vector3::kOnes);
+//todo add Vector KONES
 } // namespace ekumen

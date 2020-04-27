@@ -17,9 +17,12 @@ Vector3::Vector3()
 }
 Vector3::Vector3(const std::initializer_list<double> &list)
 {
-    values[0] = *(list.begin() + 0);
-    values[1] = *(list.begin() + 1);
-    values[2] = *(list.begin() + 2);
+    int i = 0;
+    for (const auto &v : list)
+    {
+        values[i] = v;
+        i++;
+    }
 }
 
 Vector3::Vector3(const Vector3 &p2)
@@ -160,5 +163,6 @@ const Vector3 Vector3::kUnitX = Vector3(1., 0., 0.);
 const Vector3 Vector3::kUnitY = Vector3(0., 1., 0.);
 const Vector3 Vector3::kUnitZ = Vector3(0., 0., 1.);
 const Vector3 Vector3::kZero = Vector3(0., 0., 0.);
+const Vector3 Vector3::kOnes = Vector3(1., 1., 1.);
 
 } // namespace ekumen

@@ -13,7 +13,7 @@ public:
     Vector3(const std::initializer_list<double> &list);
     Vector3(const Vector3 &p2);
     ~Vector3();
-    
+
     double &x() const { return values[0]; }
     double &x() { return values[0]; }
 
@@ -50,6 +50,7 @@ public:
     static const Vector3 kUnitY;
     static const Vector3 kUnitZ;
     static const Vector3 kZero;
+    static const Vector3 kOnes;
 
 private:
     double *values = new double[3];
