@@ -15,60 +15,67 @@ Vector3::Vector3()
     values[1] = 0.;
     values[2] = 0.;
 }
-Vector3::Vector3(const std::initializer_list<double> &list){
+Vector3::Vector3(const std::initializer_list<double> &list)
+{
     values[0] = *(list.begin() + 0);
     values[1] = *(list.begin() + 1);
     values[2] = *(list.begin() + 2);
 }
+
+Vector3::Vector3(const Vector3 &p2)
+{
+    x() = p2.x();
+    y() = p2.y();
+    z() = p2.z();
+}
+
+Vector3::~Vector3() {}
+
 double Vector3::norm() const
 {
-    return sqrt(dot(Vector3(x(), y(), z())));
+    return sqrt(dot(*this));
 }
 
 double Vector3::dot(const Vector3 &q) const
 {
-    return ((values[0] * q.x()) + (values[1] * q.y()) + (values[2] * q.z()));
+    return ((x() * q.x()) + (y() * q.y()) + (z() * q.z()));
 }
 
 Vector3 Vector3::cross(const Vector3 &q) const
 {
     Vector3 r;
-    r.x() = values[1] * q.z() - values[2] * q.y();
-    r.y() = values[2] * q.x() - values[0] * q.z();
-    r.z() = values[0] * q.y() - values[1] * q.x();
-    return (r);
+    r.x() = y() * q.z() - z() * q.y();
+    r.y() = z() * q.x() - x() * q.z();
+    r.z() = x() * q.y() - y() * q.x();
+    return r;
 }
 
-Vector3 &Vector3::operator+=(const Vector3 q){
+Vector3 &Vector3::operator+=(const Vector3 &q)
+{
     x() += q.x();
     y() += q.y();
     z() += q.z();
     return *this;
 }
 
-Vector3 &Vector3::operator-=(const Vector3 q){
+Vector3 &Vector3::operator-=(const Vector3 &q)
+{
     x() -= q.x();
     y() -= q.y();
     z() -= q.z();
     return *this;
 }
 
-Vector3 operator+(Vector3 p, Vector3 q)
-{   
-    Vector3 r;    
-    r.x() = p.x();
-    r.y() = p.y();
-    r.z() = p.z();
-    return (r+=q);
+Vector3 operator+(const Vector3 &p, const Vector3 &q)
+{
+    Vector3 r(p.x(), p.y(), p.z());
+    return (r += q);
 }
 
-Vector3 operator-(Vector3 p, Vector3 q)
+Vector3 operator-(const Vector3 &p, const Vector3 &q)
 {
-    Vector3 r;    
-    r.x() = p.x();
-    r.y() = p.y();
-    r.z() = p.z();
-    return (r-=q);
+    Vector3 r(p.x(), p.y(), p.z());
+    return (r -= q);
 }
 
 Vector3 operator*(const double &cte, const Vector3 &p)
@@ -101,9 +108,10 @@ bool operator==(const Vector3 &p, const Vector3 &q)
     return res;
 }
 
-bool operator==(const Vector3 &p, const std::initializer_list<double> &list){
-    bool res = (p.x() == *(list.begin() + 0)) && (p.y() == *(list.begin() + 1)) && (p.z() == *(list.begin() + 2));
-    return res;
+bool operator==(const Vector3 &p, const std::initializer_list<double> &list)
+{
+    Vector3 q(list);
+    return (p == q); //res;
 }
 
 bool operator!=(const Vector3 &p, const Vector3 &q)
@@ -112,10 +120,10 @@ bool operator!=(const Vector3 &p, const Vector3 &q)
     return (!(p == q));
 }
 
-bool operator!=(const Vector3 &p, const std::initializer_list<double> &list){
-    Vector3 q(*(list.begin() + 0),*(list.begin() + 1),*(list.begin() + 2));
-return (!(p == q));
-
+bool operator!=(const Vector3 &p, const std::initializer_list<double> &list)
+{
+    Vector3 q = Vector3(list);
+    return (!(p == q));
 }
 
 std::ostream &operator<<(std::ostream &os, const Vector3 &p)
