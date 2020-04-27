@@ -13,7 +13,7 @@ public:
     Vector3(const std::initializer_list<double> &list);
     Vector3(const Vector3 &p2);
     ~Vector3();
-
+    
     double &x() const { return values[0]; }
     double &x() { return values[0]; }
 

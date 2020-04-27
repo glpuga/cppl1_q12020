@@ -29,10 +29,20 @@ Matrix3::Matrix3(const std::initializer_list<double> &list)
 }
 Matrix3::Matrix3(const std::initializer_list<double> &r0, const std::initializer_list<double> &r1, const std::initializer_list<double> &r2)
 {
+    //modificar
     row_values[0] = Vector3(*(r0.begin() + 0), *(r0.begin() + 1), *(r0.begin() + 2));
     row_values[1] = Vector3(*(r1.begin() + 0), *(r1.begin() + 1), *(r1.begin() + 2));
     row_values[2] = Vector3(*(r2.begin() + 0), *(r2.begin() + 1), *(r2.begin() + 2));
 }
+
+Matrix3::Matrix3(const Matrix3 &m)
+{
+    row(0) = m.row(0);
+    row(1) = m.row(1);
+    row(2) = m.row(2);
+}
+
+Matrix3::~Matrix3() {}
 
 double Matrix3::det() const
 {
@@ -42,7 +52,7 @@ double Matrix3::det() const
     return (i.x() * j.x() + i.y() * j.y() + i.z() * j.z());
 }
 
-Vector3 Matrix3::row(const int index) const
+Vector3 &Matrix3::row(const int index) const
 {
     return (row_values[index]);
 }
@@ -53,13 +63,39 @@ Vector3 &Matrix3::row(const int index)
 
 Vector3 Matrix3::col(const int index) const
 {
-    Vector3 column;
-    column.x() = row_values[0][index];
-    column.y() = row_values[1][index];
-    column.z() = row_values[2][index];
 
-    return (column);
+    try
+    {
+        Vector3 p;
+        p.x() = row_values[0][index];
+        p.y() = row_values[1][index];
+        p.z() = row_values[2][index];
+        return p;
+    }
+    catch (const std::exception &ex)
+    {
+        std::cerr << "Error occurred: " << ex.what() << std::endl;
+    }
+    return(Vector3::kZero);
 }
+
+Vector3 Matrix3::col(const int index)
+{
+    try
+    {
+        Vector3 p;
+        p.x() = row_values[0][index];
+        p.y() = row_values[1][index];
+        p.z() = row_values[2][index];
+        return p;
+    }
+    catch (const std::exception &ex)
+    {
+        std::cerr << "Error occurred: " << ex.what() << std::endl;
+    }
+    return(Vector3::kZero);
+}
+
 const Vector3 &Matrix3::operator[](const int index) const
 {
     try
@@ -85,14 +121,14 @@ Vector3 &Matrix3::operator[](const int index)
     }
 }
 
-Matrix3 &Matrix3::operator+=(const Matrix3 q)
+Matrix3 &Matrix3::operator+=(const Matrix3 &q)
 {
     row(0) += q.row(0);
     row(1) += q.row(1);
     row(2) += q.row(2);
     return *this;
 }
-Matrix3 &Matrix3::operator-=(const Matrix3 q)
+Matrix3 &Matrix3::operator-=(const Matrix3 &q)
 {
     row(0) -= q.row(0);
     row(1) -= q.row(1);
@@ -100,7 +136,7 @@ Matrix3 &Matrix3::operator-=(const Matrix3 q)
     return *this;
 }
 
-Matrix3 operator+(Matrix3 p, Matrix3 q)
+Matrix3 operator+(const Matrix3 &p, const Matrix3 &q)
 {
     Matrix3 r;
     r.row(0) = p.row(0) + q.row(0);
@@ -109,7 +145,7 @@ Matrix3 operator+(Matrix3 p, Matrix3 q)
     return (r);
 }
 
-Matrix3 operator-(Matrix3 p, Matrix3 q)
+Matrix3 operator-(const Matrix3 &p, const Matrix3 &q)
 {
     Matrix3 r;
     r.row(0) = p.row(0) - q.row(0);
@@ -129,9 +165,8 @@ bool operator==(const Matrix3 &p, const Matrix3 &q)
 bool operator==(const Matrix3 &p, const std::initializer_list<double> &list)
 {
 
-    Matrix3 q = list;
+    Matrix3 q(list);
     return (p == q);
-    //TODO hacer lo mismo en Vector
 }
 
 Matrix3 operator*(const double &cte, const Matrix3 &p)
@@ -162,6 +197,12 @@ Matrix3 operator/(const Matrix3 &p, const Matrix3 &q)
 
 bool operator!=(const Matrix3 &p, const Matrix3 &q)
 {
+    return (!(p == q));
+}
+
+bool operator!=(const Matrix3 &p, const std::initializer_list<double> &list)
+{
+    Matrix3 q(list);
     return (!(p == q));
 }
 
