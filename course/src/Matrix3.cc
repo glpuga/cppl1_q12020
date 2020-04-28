@@ -17,7 +17,6 @@ Matrix3::Matrix3(const Vector3 &f1, const Vector3 &f2, const Vector3 &f3)
 }
 Matrix3::Matrix3(const std::initializer_list<double> &list)
 {
-    //TODO Pasar a vector
     int i = 0, j = 0;
     for (const auto &v : list)
     {
@@ -28,16 +27,6 @@ Matrix3::Matrix3(const std::initializer_list<double> &list)
             j = 0;
         }
     }
-    /*
-    for (size_t i = 0; i < 3; i++)
-    {
-        for (size_t j = 0; j < 3; j++)
-        {
-            row_values[i][j] = *(list.begin() + c);
-            c++;
-        }
-    }
-    */
 }
 Matrix3::Matrix3(const std::initializer_list<double> &r0, const std::initializer_list<double> &r1, const std::initializer_list<double> &r2)
 {
@@ -63,12 +52,26 @@ double Matrix3::det() const
 }
 
 Vector3 &Matrix3::row(const int &index) const
-{ //todo Agregar try catch
-    return (row_values[index]);
+{
+    try
+    {
+        return (row_values[index]);
+    }
+    catch (const std::exception &ex)
+    {
+        std::cerr << "Error occurred: " << ex.what() << std::endl;
+    }
 }
 Vector3 &Matrix3::row(const int &index)
-{ //todo Agregar try catch
-    return (row_values[index]);
+{
+    try
+    {
+        return (row_values[index]);
+    }
+    catch (const std::exception &ex)
+    {
+        std::cerr << "Error occurred: " << ex.what() << std::endl;
+    }
 }
 
 Vector3 Matrix3::col(const int &index) const
@@ -230,5 +233,4 @@ std::ostream &operator<<(std::ostream &os, const Matrix3 &p)
 const Matrix3 Matrix3::kIdentity = Matrix3(Vector3::kUnitX, Vector3::kUnitY, Vector3::kUnitZ);
 const Matrix3 Matrix3::kZero = Matrix3(Vector3::kZero, Vector3::kZero, Vector3::kZero);
 const Matrix3 Matrix3::kOnes = Matrix3(Vector3::kOnes, Vector3::kOnes, Vector3::kOnes);
-//todo add Vector KONES
 } // namespace ekumen

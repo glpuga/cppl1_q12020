@@ -14,12 +14,18 @@
 #include "Matrix3.h"
 #include "gtest/gtest.h"
 
-namespace ekumen {
-namespace math {
-namespace cppcourse {
-namespace test {
-namespace {
-GTEST_TEST(Vector3Test, Vector3Operations) {
+namespace ekumen
+{
+namespace math
+{
+namespace cppcourse
+{
+namespace test
+{
+namespace
+{
+GTEST_TEST(Vector3Test, Vector3Operations)
+{
   const double kTolerance{1e-12};
   const Vector3 p{1., 2., 3.};
   const Vector3 q{4., 5., 6.};
@@ -54,11 +60,19 @@ GTEST_TEST(Vector3Test, Vector3Operations) {
   t[1] = 2.;
   t.z() = 3.;
   EXPECT_EQ(t, p);
+
+  try
+  {
+    t[4] = 1;
+  }
+  catch (std::out_of_range const &err)
+  {
+    EXPECT_EQ(err.what(), std::string("Error occurred: Out of range"));
+  }
 }
 
-//TODO Pasar constantes a constexpr
-//TODO cambiar KOnes
-GTEST_TEST(Matrix3Test, Matrix3Operations) {
+GTEST_TEST(Matrix3Test, Matrix3Operations)
+{
   const double kTolerance{1e-12};
   Matrix3 m1{{1., 2., 3.}, {4., 5., 6.}, {7., 8., 9.}};
   const Matrix3 m2{1., 2., 3., 4., 5., 6., 7., 8., 9.};
@@ -68,7 +82,7 @@ GTEST_TEST(Matrix3Test, Matrix3Operations) {
   EXPECT_EQ(m1 - m2, Matrix3::kZero);
   EXPECT_EQ(m1 + m2, m1 * 2.);
   EXPECT_EQ(m1 + m2, 2. * m2);
-  EXPECT_EQ(m1 * m2, std::initializer_list<double>({1.,  4.,  9., 16., 25., 36., 49., 64., 81.}));
+  EXPECT_EQ(m1 * m2, std::initializer_list<double>({1., 4., 9., 16., 25., 36., 49., 64., 81.}));
   EXPECT_EQ(m1 / m2, Matrix3::kOnes);
   EXPECT_NEAR(m1.det(), 0., kTolerance);
   m1[2][2] = 10.;
@@ -80,20 +94,26 @@ GTEST_TEST(Matrix3Test, Matrix3Operations) {
 
   const std::vector<Vector3> kExpectedRows{Vector3(1., 2., 3.), Vector3(4., 5., 6.), Vector3(7., 8., 9.)};
   const std::vector<Vector3> kExpectedCols{Vector3(1., 4., 7.), Vector3(2., 5., 8.), Vector3(3., 6., 9.)};
-  for (const Vector3& r : kExpectedRows) {
+  for (const Vector3 &r : kExpectedRows)
+  {
     bool found{false};
-    for (int i = 0; i < 3; ++i) {
-      if (r == m2.row(i)) {
+    for (int i = 0; i < 3; ++i)
+    {
+      if (r == m2.row(i))
+      {
         found = true;
         break;
       }
     }
     ASSERT_TRUE(found);
   }
-  for (const Vector3& c : kExpectedCols) {
+  for (const Vector3 &c : kExpectedCols)
+  {
     bool found{false};
-    for (int i = 0; i < 3; ++i) {
-      if (c == m2.col(i)) {
+    for (int i = 0; i < 3; ++i)
+    {
+      if (c == m2.col(i))
+      {
         found = true;
         break;
       }
@@ -136,13 +156,14 @@ GTEST_TEST(IsometryTest, IsometryOperations) {
   EXPECT_EQ(ss.str(), "[T: (x: 0, y: 0, z: 0), R:[[0.923879533, -0.382683432, 0], [0.382683432, 0.923879533, 0], [0, 0, 1]]]");
 }
 */
-}
-}  // namespace test
-}  // namespace cppcourse
-}  // namespace math
-}  // namespace ekumen
+} // namespace
+} // namespace test
+} // namespace cppcourse
+} // namespace math
+} // namespace ekumen
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
