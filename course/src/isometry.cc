@@ -86,6 +86,10 @@ Isometry Isometry::FromEulerAngles(const double &x, const double &y, const doubl
     double cz = cos(z);
     double sz = sin(z);
 
+    //std::cout << "cos x: " << cx << " sin x: " << sx << std::endl;
+    //std::cout << "cos y: " << cy << " sin x: " << sy << std::endl;
+    //std::cout << "cos z: " << cz << " sin x: " << sz << std::endl;
+
     double m00 = cy * cz;
     double m01 = -cy * sz;
     double m02 = sy;
@@ -108,7 +112,7 @@ Vector3 Isometry::transform(const Vector3 &v) const
     return ((*this) * v);
 }
 
-Vector3 Isometry::transform(const std::initializer_list<double> &list)
+Vector3 Isometry::transform(const std::initializer_list<double> &list) const
 {
     return ((*this) * Vector3(list));
 }
@@ -154,9 +158,13 @@ Isometry operator*(const Isometry &i, const Isometry &i2)
     Matrix3 q = i2.matrix3_isometry;
 
     Vector3 a, b;
+
+    //std::cerr << "--------------------------------" << std::endl;
     for (size_t i = 0; i < 3; i++)
     {
-        a = p.row(i);
+        a.x() = p.row(i).x();
+        a.y() = p.row(i).y();
+        a.z() = p.row(i).z();
         for (size_t j = 0; j < 3; j++)
         {
             b = q.col(j);
@@ -173,6 +181,34 @@ std::ostream &operator<<(std::ostream &os, const Isometry &p)
     os << "[T: " << p.vector3_isometry << ", ";
     os << "R:" << p.matrix3_isometry << "]";
     return os;
+}
+
+Isometry &Isometry::operator+=(const Isometry &q)
+{
+    matrix3_isometry += q.matrix3_isometry;
+    vector3_isometry += q.vector3_isometry;
+    v_row3_isometry[0] += q.v_row3_isometry[0];
+    return *this;
+}
+Isometry &Isometry::operator-=(const Isometry &q)
+{
+    matrix3_isometry -= q.matrix3_isometry;
+    vector3_isometry -= q.vector3_isometry;
+    v_row3_isometry[0] -= q.v_row3_isometry[0];
+    return *this;
+}
+
+Isometry operator+(const Isometry &p, const Isometry &q)
+{
+    Matrix3 m(p.rotation() + q.rotation());
+    Vector3 v(p.translation() + q.translation());
+    return (Isometry(v, m));
+}
+Isometry operator-(const Isometry &p, const Isometry &q)
+{
+    Matrix3 m(p.rotation() - q.rotation());
+    Vector3 v(p.translation() - q.translation());
+    return (Isometry(v, m));
 }
 
 } // namespace ekumen

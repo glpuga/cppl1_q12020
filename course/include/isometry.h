@@ -1,7 +1,7 @@
 #pragma once
 #include "Vector3.h"
 #include "Matrix3.h"
-#include <math.h>
+#include <cmath>
 
 namespace ekumen
 {
@@ -19,7 +19,7 @@ public:
     static Isometry FromEulerAngles(const double &x, const double &y, const double &z);
 
     Vector3 transform(const Vector3 &v) const;
-    Vector3 transform(const std::initializer_list<double> &list);
+    Vector3 transform(const std::initializer_list<double> &list) const;
     Isometry inverse(void) const;
     Isometry compose(const Isometry &I1) const;
     Vector3 translation() const;
@@ -31,10 +31,16 @@ public:
     friend Vector3 operator*(const Isometry &i, const Vector3 &v);
     friend Isometry operator*(const Isometry &i, const Isometry &i2);
 
+    Isometry &operator+=(const Isometry &q);
+    Isometry &operator-=(const Isometry &q);
+
 private:
     Vector3 vector3_isometry;
     Matrix3 matrix3_isometry;
     double v_row3_isometry[4];
 };
+
+Isometry operator+(const Isometry &p, const Isometry &q);
+Isometry operator-(const Isometry &p, const Isometry &q);
 
 } // namespace ekumen

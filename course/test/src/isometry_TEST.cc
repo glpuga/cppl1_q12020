@@ -33,11 +33,14 @@ testing::AssertionResult areAlmostEqual(const Isometry &I1, const Isometry &I2, 
   for (size_t i = 0; i < 2; i++)
   {
     if (fabs(IT[i]) > kT)
-      for (size_t j = 0; j < 2; j++)
-      {
-        if (fabs(IR[i][j]) > kT)
-          return ::testing::AssertionFailure();
-      }
+      return ::testing::AssertionFailure() << "Isometry Matrix I1: " << I1 << std::endl
+                                           << "Isometry Matrix I2: " << I2 << std::endl;
+    for (size_t j = 0; j < 2; j++)
+    {
+      if (fabs(IR[i][j]) > kT)
+        return ::testing::AssertionFailure() << "Isometry Matrix I1: " << I1 << std::endl
+                                             << "Isometry Matrix I2: " << I2 << std::endl;
+    }
   }
   return ::testing::AssertionSuccess();
 }
@@ -47,12 +50,13 @@ testing::AssertionResult areAlmostEqual(const Matrix3 &M1, const Matrix3 &M2, co
   Matrix3 MR = M1 - M2;
   for (size_t i = 0; i < 2; i++)
   {
-      for (size_t j = 0; j < 2; j++)
-      {
-        if (fabs(MR[i][j]) > kT)
-          return ::testing::AssertionFailure();
-      }
+    for (size_t j = 0; j < 2; j++)
+    {
+      if (fabs(MR[i][j]) > kT)
+        return ::testing::AssertionFailure();
+    }
   }
+
   return ::testing::AssertionSuccess();
 }
 GTEST_TEST(Vector3Test, Vector3Operations)
@@ -175,16 +179,12 @@ GTEST_TEST(IsometryTest, IsometryOperations)
 
   // See https://github.com/google/googletest/blob/master/googletest/docs/advanced.md#using-a-function-that-returns-an-assertionresult
   EXPECT_TRUE(areAlmostEqual(t6, t3 * t4 * t5, kTolerance));
-
   EXPECT_EQ(t3.translation(), Vector3::kZero);
   const double pi_8{M_PI / 8.};
   const double cpi_8{std::cos(pi_8)}; // 0.923879532
   const double spi_8{std::sin(pi_8)}; // 0.382683432
-  
   Matrix3 pp = Matrix3(std::initializer_list<double>({cpi_8, -spi_8, 0., spi_8, cpi_8, 0., 0., 0., 1.}));
   EXPECT_TRUE(areAlmostEqual(t5.rotation(), pp, kTolerance));
-  //EXPECT_TRUE(areAlmostEqual(t5.rotation(), Matrix3{cpi_8, -spi_8, 0., spi_8, cpi_8, 0., 0., 0., 1.}, kTolerance));
-  //I changed for read clearly.
 
   EXPECT_EQ(t5.rotation(), pp);
   std::stringstream ss;
