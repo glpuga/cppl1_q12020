@@ -12,6 +12,7 @@
 
 #include "Vector3.h"
 #include "Matrix3.h"
+#include "isometry.h"
 #include "gtest/gtest.h"
 
 namespace ekumen
@@ -24,6 +25,36 @@ namespace test
 {
 namespace
 {
+
+testing::AssertionResult areAlmostEqual(const Isometry &I1, const Isometry &I2, const double kT)
+{
+  Matrix3 IR = I1.rotation() - I2.rotation();
+  Vector3 IT = I1.translation() - I2.translation();
+  for (size_t i = 0; i < 2; i++)
+  {
+    if (fabs(IT[i]) > kT)
+      for (size_t j = 0; j < 2; j++)
+      {
+        if (fabs(IR[i][j]) > kT)
+          return ::testing::AssertionFailure();
+      }
+  }
+  return ::testing::AssertionSuccess();
+}
+
+testing::AssertionResult areAlmostEqual(const Matrix3 &M1, const Matrix3 &M2, const double kT)
+{
+  Matrix3 MR = M1 - M2;
+  for (size_t i = 0; i < 2; i++)
+  {
+      for (size_t j = 0; j < 2; j++)
+      {
+        if (fabs(MR[i][j]) > kT)
+          return ::testing::AssertionFailure();
+      }
+  }
+  return ::testing::AssertionSuccess();
+}
 GTEST_TEST(Vector3Test, Vector3Operations)
 {
   const double kTolerance{1e-12};
@@ -122,14 +153,12 @@ GTEST_TEST(Matrix3Test, Matrix3Operations)
   }
 }
 
-/*
-GTEST_TEST(IsometryTest, IsometryOperations) {
+GTEST_TEST(IsometryTest, IsometryOperations)
+{
   const double kTolerance{1e-12};
   const Isometry t1 = Isometry::FromTranslation({1., 2., 3.});
-  const Isometry t2{{1., 2., 3.}, Matrix3::kIdentity};
-
+  const Isometry t2{std::initializer_list<double>({1., 2., 3.}), Matrix3::kIdentity};
   EXPECT_EQ(t1, t2);
-
   // This is not mathematically correct but it could be a nice to have.
   EXPECT_EQ(t1 * Vector3(1., 1., 1.), Vector3(2., 3., 4.));
   EXPECT_EQ(t1.transform({1., 1., 1.}), Vector3(2., 3., 4.));
@@ -141,21 +170,28 @@ GTEST_TEST(IsometryTest, IsometryOperations) {
   const Isometry t3{Isometry::RotateAround(Vector3::kUnitX, M_PI / 2.)};
   const Isometry t4{Isometry::RotateAround(Vector3::kUnitY, M_PI / 4.)};
   const Isometry t5{Isometry::RotateAround(Vector3::kUnitZ, M_PI / 8.)};
+
   const Isometry t6{Isometry::FromEulerAngles(M_PI / 2., M_PI / 4., M_PI / 8.)};
+
   // See https://github.com/google/googletest/blob/master/googletest/docs/advanced.md#using-a-function-that-returns-an-assertionresult
   EXPECT_TRUE(areAlmostEqual(t6, t3 * t4 * t5, kTolerance));
 
   EXPECT_EQ(t3.translation(), Vector3::kZero);
   const double pi_8{M_PI / 8.};
-  const double cpi_8{std::cos(pi_8)};  // 0.923879532
-  const double spi_8{std::sin(pi_8)};  // 0.382683432
-  EXPECT_TRUE(areAlmostEqual(t5.rotation(), Matrix3{cpi_8, -spi_8, 0., spi_8, cpi_8, 0., 0., 0., 1.}, kTolerance));
+  const double cpi_8{std::cos(pi_8)}; // 0.923879532
+  const double spi_8{std::sin(pi_8)}; // 0.382683432
+  
+  Matrix3 pp = Matrix3(std::initializer_list<double>({cpi_8, -spi_8, 0., spi_8, cpi_8, 0., 0., 0., 1.}));
+  EXPECT_TRUE(areAlmostEqual(t5.rotation(), pp, kTolerance));
+  //EXPECT_TRUE(areAlmostEqual(t5.rotation(), Matrix3{cpi_8, -spi_8, 0., spi_8, cpi_8, 0., 0., 0., 1.}, kTolerance));
+  //I changed for read clearly.
 
+  EXPECT_EQ(t5.rotation(), pp);
   std::stringstream ss;
   ss << t5;
   EXPECT_EQ(ss.str(), "[T: (x: 0, y: 0, z: 0), R:[[0.923879533, -0.382683432, 0], [0.382683432, 0.923879533, 0], [0, 0, 1]]]");
 }
-*/
+
 } // namespace
 } // namespace test
 } // namespace cppcourse

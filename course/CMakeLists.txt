@@ -18,6 +18,7 @@ set(LIBRARY_SOURCES
 	src/foo.cc
 	src/Vector3.cc
 	src/Matrix3.cc
+	src/isometry.cc
 )
 
 # Library creation.
