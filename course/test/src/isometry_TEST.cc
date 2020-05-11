@@ -3,26 +3,70 @@
 // needed to implement an isometry.
 
 // Consider including other header files if needed.
-#include "isometry.h"
+//#include "isometry.h"
 
 #include <cmath>
 #include <sstream>
 #include <string>
+#include <initializer_list>
 
+#include "Vector3.h"
+#include "Matrix3.h"
+#include "isometry.h"
 #include "gtest/gtest.h"
 
-namespace ekumen {
-namespace math {
-namespace test {
-namespace {
+namespace ekumen
+{
+namespace math
+{
+namespace cppcourse
+{
+namespace test
+{
+namespace
+{
 
-GTEST_TEST(Vector3Test, Vector3Operations) {
+testing::AssertionResult areAlmostEqual(const Isometry &I1, const Isometry &I2, const double kT)
+{
+  Matrix3 IR = I1.rotation() - I2.rotation();
+  Vector3 IT = I1.translation() - I2.translation();
+  for (size_t i = 0; i < 2; i++)
+  {
+    if (fabs(IT[i]) > kT)
+      return ::testing::AssertionFailure() << "Isometry Matrix I1: " << I1 << std::endl
+                                           << "Isometry Matrix I2: " << I2 << std::endl;
+    for (size_t j = 0; j < 2; j++)
+    {
+      if (fabs(IR[i][j]) > kT)
+        return ::testing::AssertionFailure() << "Isometry Matrix I1: " << I1 << std::endl
+                                             << "Isometry Matrix I2: " << I2 << std::endl;
+    }
+  }
+  return ::testing::AssertionSuccess();
+}
+
+testing::AssertionResult areAlmostEqual(const Matrix3 &M1, const Matrix3 &M2, const double kT)
+{
+  Matrix3 MR = M1 - M2;
+  for (size_t i = 0; i < 2; i++)
+  {
+    for (size_t j = 0; j < 2; j++)
+    {
+      if (fabs(MR[i][j]) > kT)
+        return ::testing::AssertionFailure();
+    }
+  }
+
+  return ::testing::AssertionSuccess();
+}
+GTEST_TEST(Vector3Test, Vector3Operations)
+{
   const double kTolerance{1e-12};
   const Vector3 p{1., 2., 3.};
   const Vector3 q{4., 5., 6.};
 
-  EXPECT_EQ(p + q, {5., 7., 9.});
-  EXPECT_EQ(p - q, {-3., -3., -3.});
+  EXPECT_EQ(p + q, std::initializer_list<double>({5., 7., 9.}));
+  EXPECT_EQ(p - q, std::initializer_list<double>({-3., -3., -3.}));
   EXPECT_EQ(p * 2., Vector3(2., 4., 6));
   EXPECT_EQ(2 * q, Vector3(8., 10., 12.));
   EXPECT_EQ(p * q, Vector3(4., 10., 18.));
@@ -40,8 +84,8 @@ GTEST_TEST(Vector3Test, Vector3Operations) {
   EXPECT_EQ(ss.str(), "(x: 1, y: 2, z: 3)");
 
   EXPECT_TRUE(Vector3::kUnitX == Vector3(1., 0., 0));
-  EXPECT_TRUE(Vector3::kUnitX != {1., 1., 0});
-  EXPECT_TRUE(Vector3::kUnitY == {0., 1., 0});
+  EXPECT_TRUE(Vector3::kUnitX != std::initializer_list<double>({1., 1., 0}));
+  EXPECT_TRUE(Vector3::kUnitY == std::initializer_list<double>({0., 1., 0}));
   EXPECT_TRUE(Vector3::kUnitZ == Vector3::kUnitX.cross(Vector3::kUnitY));
   EXPECT_NEAR(Vector3::kUnitX.dot(Vector3::kUnitZ), 0., kTolerance);
 
@@ -51,9 +95,19 @@ GTEST_TEST(Vector3Test, Vector3Operations) {
   t[1] = 2.;
   t.z() = 3.;
   EXPECT_EQ(t, p);
+
+  try
+  {
+    t[4] = 1;
+  }
+  catch (std::out_of_range const &err)
+  {
+    EXPECT_EQ(err.what(), std::string("Error occurred: Out of range"));
+  }
 }
 
-GTEST_TEST(Matrix3Test, Matrix3Operations) {
+GTEST_TEST(Matrix3Test, Matrix3Operations)
+{
   const double kTolerance{1e-12};
   Matrix3 m1{{1., 2., 3.}, {4., 5., 6.}, {7., 8., 9.}};
   const Matrix3 m2{1., 2., 3., 4., 5., 6., 7., 8., 9.};
@@ -63,7 +117,7 @@ GTEST_TEST(Matrix3Test, Matrix3Operations) {
   EXPECT_EQ(m1 - m2, Matrix3::kZero);
   EXPECT_EQ(m1 + m2, m1 * 2.);
   EXPECT_EQ(m1 + m2, 2. * m2);
-  EXPECT_EQ(m1 * m2, {1.,  4.,  9., 16., 25., 36., 49., 64., 81.});
+  EXPECT_EQ(m1 * m2, std::initializer_list<double>({1., 4., 9., 16., 25., 36., 49., 64., 81.}));
   EXPECT_EQ(m1 / m2, Matrix3::kOnes);
   EXPECT_NEAR(m1.det(), 0., kTolerance);
   m1[2][2] = 10.;
@@ -75,20 +129,26 @@ GTEST_TEST(Matrix3Test, Matrix3Operations) {
 
   const std::vector<Vector3> kExpectedRows{Vector3(1., 2., 3.), Vector3(4., 5., 6.), Vector3(7., 8., 9.)};
   const std::vector<Vector3> kExpectedCols{Vector3(1., 4., 7.), Vector3(2., 5., 8.), Vector3(3., 6., 9.)};
-  for (const Vector3& r : kExpectedRows) {
+  for (const Vector3 &r : kExpectedRows)
+  {
     bool found{false};
-    for (int i = 0; i < 3; ++i) {
-      if (r == m2.row(i)) {
+    for (int i = 0; i < 3; ++i)
+    {
+      if (r == m2.row(i))
+      {
         found = true;
         break;
       }
     }
     ASSERT_TRUE(found);
   }
-  for (const Vector3& c : kExpectedCols) {
+  for (const Vector3 &c : kExpectedCols)
+  {
     bool found{false};
-    for (int i = 0; i < 3; ++i) {
-      if (c == m2.col(i)) {
+    for (int i = 0; i < 3; ++i)
+    {
+      if (c == m2.col(i))
+      {
         found = true;
         break;
       }
@@ -97,13 +157,12 @@ GTEST_TEST(Matrix3Test, Matrix3Operations) {
   }
 }
 
-GTEST_TEST(IsometryTest, IsometryOperations) {
+GTEST_TEST(IsometryTest, IsometryOperations)
+{
   const double kTolerance{1e-12};
   const Isometry t1 = Isometry::FromTranslation({1., 2., 3.});
-  const Isometry t2{{1., 2., 3.}, Matrix3::kIdentity};
-
+  const Isometry t2{std::initializer_list<double>({1., 2., 3.}), Matrix3::kIdentity};
   EXPECT_EQ(t1, t2);
-
   // This is not mathematically correct but it could be a nice to have.
   EXPECT_EQ(t1 * Vector3(1., 1., 1.), Vector3(2., 3., 4.));
   EXPECT_EQ(t1.transform({1., 1., 1.}), Vector3(2., 3., 4.));
@@ -115,27 +174,32 @@ GTEST_TEST(IsometryTest, IsometryOperations) {
   const Isometry t3{Isometry::RotateAround(Vector3::kUnitX, M_PI / 2.)};
   const Isometry t4{Isometry::RotateAround(Vector3::kUnitY, M_PI / 4.)};
   const Isometry t5{Isometry::RotateAround(Vector3::kUnitZ, M_PI / 8.)};
+
   const Isometry t6{Isometry::FromEulerAngles(M_PI / 2., M_PI / 4., M_PI / 8.)};
+
   // See https://github.com/google/googletest/blob/master/googletest/docs/advanced.md#using-a-function-that-returns-an-assertionresult
   EXPECT_TRUE(areAlmostEqual(t6, t3 * t4 * t5, kTolerance));
-
   EXPECT_EQ(t3.translation(), Vector3::kZero);
   const double pi_8{M_PI / 8.};
-  const double cpi_8{std::cos(pi_8)};  // 0.923879532
-  const double spi_8{std::sin(pi_8)};  // 0.382683432
-  EXPECT_TRUE(areAlmostEqual(t5.rotation(), Matrix3{cpi_8, -spi_8, 0., spi_8, cpi_8, 0., 0., 0., 1.}, kTolerance));
+  const double cpi_8{std::cos(pi_8)}; // 0.923879532
+  const double spi_8{std::sin(pi_8)}; // 0.382683432
+  Matrix3 pp = Matrix3(std::initializer_list<double>({cpi_8, -spi_8, 0., spi_8, cpi_8, 0., 0., 0., 1.}));
+  EXPECT_TRUE(areAlmostEqual(t5.rotation(), pp, kTolerance));
 
+  EXPECT_EQ(t5.rotation(), pp);
   std::stringstream ss;
   ss << t5;
   EXPECT_EQ(ss.str(), "[T: (x: 0, y: 0, z: 0), R:[[0.923879533, -0.382683432, 0], [0.382683432, 0.923879533, 0], [0, 0, 1]]]");
 }
 
-}  // namespace
-}  // namespace test
-}  // namespace math
-}  // namespace ekumen
+} // namespace
+} // namespace test
+} // namespace cppcourse
+} // namespace math
+} // namespace ekumen
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
