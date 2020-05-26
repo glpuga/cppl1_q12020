@@ -122,7 +122,6 @@ GTEST_TEST(Matrix3Test, Matrix3Operations)
   EXPECT_NEAR(m1.det(), 0., kTolerance);
   m1[2][2] = 10.;
   EXPECT_NEAR(m1.det(), -2.9999999999999996, kTolerance);
-
   std::stringstream ss;
   ss << m3;
   EXPECT_EQ(ss.str(), "[[1, 0, 0], [0, 1, 0], [0, 0, 1]]");
@@ -142,11 +141,12 @@ GTEST_TEST(Matrix3Test, Matrix3Operations)
     }
     ASSERT_TRUE(found);
   }
+
   for (const Vector3 &c : kExpectedCols)
   {
     bool found{false};
     for (int i = 0; i < 3; ++i)
-    {
+    {        
       if (c == m2.col(i))
       {
         found = true;
