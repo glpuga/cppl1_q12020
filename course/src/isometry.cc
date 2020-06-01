@@ -6,20 +6,12 @@ namespace ekumen
     {
         vector3_isometry = Vector3::kZero;
         matrix3_isometry = Matrix3::kIdentity;
-        v_row3_isometry[0] = 0;
-        v_row3_isometry[1] = 0;
-        v_row3_isometry[2] = 0;
-        v_row3_isometry[3] = 1;
     }
 
     Isometry::Isometry(const Vector3 &v, const Matrix3 &m)
     {
         vector3_isometry = v;
         matrix3_isometry = m;
-        v_row3_isometry[0] = 0;
-        v_row3_isometry[1] = 0;
-        v_row3_isometry[2] = 0;
-        v_row3_isometry[3] = 1;
     }
 
     Isometry::Isometry(const std::initializer_list<double> &list, Matrix3 &m)
@@ -30,10 +22,6 @@ namespace ekumen
             {
                 vector3_isometry = Vector3(list);
                 matrix3_isometry = m;
-                v_row3_isometry[0] = 0;
-                v_row3_isometry[1] = 0;
-                v_row3_isometry[2] = 0;
-                v_row3_isometry[3] = 1;
             }
             catch (const std::exception &ex)
             {
@@ -42,23 +30,12 @@ namespace ekumen
         }
     }
 
-    Isometry::~Isometry()
-    {
-    }
-
     Isometry Isometry::FromTranslation(const std::initializer_list<double> &list)
     {
         if (list.size() == 3)
         {
-            try
-            {
                 Isometry I(Vector3(list), Matrix3::kIdentity);
                 return I;
-            }
-            catch (const std::exception &ex)
-            {
-                std::cerr << "Error occurred: " << ex.what() << std::endl;
-            }
         }
 
         return Isometry();
@@ -153,7 +130,7 @@ namespace ekumen
 
     Isometry Isometry::compose(const Isometry &I1) const
     {
-        return Isometry((*this) * I1);
+        return (*this) * I1;
     }
 
     bool operator==(const Isometry &p, const Isometry &q)
@@ -191,9 +168,7 @@ namespace ekumen
 
         for (size_t i = 0; i < 3; ++i)
         {
-            a.x() = p.row(i).x();
-            a.y() = p.row(i).y();
-            a.z() = p.row(i).z();
+            a = p.row(i);
             for (size_t j = 0; j < 3; ++j)
             {
                 b = q.col(j);
@@ -210,36 +185,6 @@ namespace ekumen
         os << "[T: " << p.vector3_isometry << ", ";
         os << "R:" << p.matrix3_isometry << "]";
         return os;
-    }
-
-    Isometry &Isometry::operator+=(const Isometry &q)
-    {
-        matrix3_isometry += q.matrix3_isometry;
-        vector3_isometry += q.vector3_isometry;
-        v_row3_isometry[0] += q.v_row3_isometry[0];
-        return *this;
-    }
-
-    Isometry &Isometry::operator-=(const Isometry &q)
-    {
-        matrix3_isometry -= q.matrix3_isometry;
-        vector3_isometry -= q.vector3_isometry;
-        v_row3_isometry[0] -= q.v_row3_isometry[0];
-        return *this;
-    }
-
-    Isometry operator+(const Isometry &p, const Isometry &q)
-    {
-        Matrix3 m(p.rotation() + q.rotation());
-        Vector3 v(p.translation() + q.translation());
-        return Isometry(v, m);
-    }
-
-    Isometry operator-(const Isometry &p, const Isometry &q)
-    {
-        Matrix3 m(p.rotation() - q.rotation());
-        Vector3 v(p.translation() - q.translation());
-        return Isometry(v, m);
     }
 
 } // namespace ekumen

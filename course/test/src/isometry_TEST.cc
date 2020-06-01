@@ -95,15 +95,6 @@ GTEST_TEST(Vector3Test, Vector3Operations)
   t[1] = 2.;
   t.z() = 3.;
   EXPECT_EQ(t, p);
-
-  try
-  {
-    t[4] = 1;
-  }
-  catch (std::out_of_range const &err)
-  {
-    EXPECT_EQ(err.what(), std::string("Error occurred: Out of range"));
-  }
 }
 
 GTEST_TEST(Matrix3Test, Matrix3Operations)
@@ -112,7 +103,6 @@ GTEST_TEST(Matrix3Test, Matrix3Operations)
   Matrix3 m1{{1., 2., 3.}, {4., 5., 6.}, {7., 8., 9.}};
   const Matrix3 m2{1., 2., 3., 4., 5., 6., 7., 8., 9.};
   const Matrix3 m3 = Matrix3::kIdentity;
-
   EXPECT_EQ(m1, m2);
   EXPECT_EQ(m1 - m2, Matrix3::kZero);
   EXPECT_EQ(m1 + m2, m1 * 2.);

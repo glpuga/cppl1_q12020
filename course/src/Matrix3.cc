@@ -22,9 +22,7 @@ namespace ekumen
         int i = 0, j = 0;
         if (list.size() == 9)
         {
-            try
-            {
-                for (const auto &v : list)
+            for (const auto &v : list)
                 {
                     row_values[i][j] = v;
                     if (j++ == 2)
@@ -33,26 +31,15 @@ namespace ekumen
                         j = 0;
                     }
                 }
-            }
-            catch (const std::exception &ex)
-            {
-                std::cerr << "Error occurred: " << ex.what() << std::endl;
-            }
         }
     }
 
     Matrix3::Matrix3(const std::initializer_list<double> &r0, const std::initializer_list<double> &r1, const std::initializer_list<double> &r2)
     {
-        try
-        {
-            row(0) = Vector3(r0);
-            row(1) = Vector3(r1);
-            row(2) = Vector3(r2);
-        }
-        catch (const std::exception &ex)
-        {
-            std::cerr << "Error occurred: " << ex.what() << std::endl;
-        }
+        row(0) = Vector3(r0);
+        row(1) = Vector3(r1);
+        row(2) = Vector3(r2);
+        
     }
 
     Matrix3::Matrix3(const Matrix3 &m)
@@ -62,8 +49,6 @@ namespace ekumen
         row(2) = m.row(2);
     }
 
-    Matrix3::~Matrix3() {}
-
     double Matrix3::det() const
     {
         const Vector3 &i = row(0);
@@ -71,71 +56,43 @@ namespace ekumen
         return (i.x() * j.x() + i.y() * j.y() + i.z() * j.z());
     }
 
-    const Vector3 Matrix3::row(const int index) const
+    const Vector3 Matrix3::row(int index) const
     {
-        try
-        {
-            if (index < 3)
-            {
-                return row_values[index];
-            }
-        }
-        catch (const std::exception &ex)
-        {
-            std::cerr << "Error occurred: " << ex.what() << std::endl;
-        }
-        return Vector3();
+        if ((index >= 0)&&(index < 3))
+            return row_values[index];
+        else
+            return Vector3();
     }
 
-    Vector3 &Matrix3::row(const int index)
+    Vector3 &Matrix3::row(int index)
     {
-        try
-        {
-            if (index < 3)
-            {
-                return row_values[index];
-            }
-        }
-        catch (const std::exception &ex)
-        {
-            std::cerr << "Error occurred: " << ex.what() << std::endl;
-        }
-        return row_values[0];
+        if ((index >= 0)&&(index < 3))
+            return row_values[index];
+        else
+            return row_values[0];
+        
     }
 
     const Vector3 Matrix3::col(const int index) const
     {
 
-        try
-        {
-            if (index < 3)
+            if ((index >= 0)&&(index < 3))
             {
                 Vector3 p(row_values[0][index], row_values[1][index], row_values[2][index]);
                 return p;
             }
-        }
-        catch (const std::exception &ex)
-        {
-            std::cerr << "Error occurred: " << ex.what() << std::endl;
-        }
+
 
         return Vector3();
     }
 
     Vector3 Matrix3::col(const int index)
     {
-        try
-        {
-            if (index < 3)
+            if ((index >= 0)&&(index < 3))
             {
                 Vector3 p(row_values[0][index], row_values[1][index], row_values[2][index]);
                 return p;
             }
-        }
-        catch (const std::exception &ex)
-        {
-            std::cerr << "Error occurred: " << ex.what() << std::endl;
-        }
         return Vector3();
     }
 
@@ -143,7 +100,7 @@ namespace ekumen
     {
         try
         {
-            if (index < 3)
+            if ((index >= 0)&&(index < 3))
             {
                 return row_values[index];
             }
@@ -159,7 +116,7 @@ namespace ekumen
     {
         try
         {
-            if (index < 3)
+            if ((index >= 0)&&(index < 3))
             {
                 return row(index);
             }

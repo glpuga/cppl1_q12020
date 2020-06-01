@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cmath>
 #include <memory>
+#include <utility>
 
 namespace ekumen
 {
@@ -13,8 +14,8 @@ namespace ekumen
         explicit Vector3(const double x, const double y, const double z);
         Vector3(const std::initializer_list<double> &list);
         Vector3(const Vector3 &p2);
-        ~Vector3();
-
+        Vector3(Vector3 &&other);
+        
         const double &x() const { return values[0]; }
         double &x() { return values[0]; }
 
@@ -33,6 +34,8 @@ namespace ekumen
 
         Vector3 &operator+=(const Vector3 &q);
         Vector3 &operator-=(const Vector3 &q);
+        Vector3 &operator=(const Vector3 &r);   // copy assignment
+        Vector3 &operator=(Vector3 &&other);        // move assignment
 
         friend Vector3 operator*(const double &cte, const Vector3 &p);
         friend Vector3 operator*(const Vector3 &p, const double &cte);
@@ -55,8 +58,10 @@ namespace ekumen
         static const Vector3 kZero;
         static const Vector3 kOnes;
 
-    private:
-        double values[3];
+    private:        
+        std::shared_ptr<double[]> values;
+        
+
     };
 
     Vector3 operator+(const Vector3 &p, const Vector3 &q);

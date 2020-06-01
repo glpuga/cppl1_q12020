@@ -14,11 +14,10 @@ namespace ekumen
         Matrix3(const std::initializer_list<double> &list);
         Matrix3(const std::initializer_list<double> &r1, const std::initializer_list<double> &r2, const std::initializer_list<double> &r3);
         Matrix3(const Matrix3 &m);
-        ~Matrix3();
 
         double det() const;
-        const Vector3 row(const int index) const;
-        Vector3 &row(const int index);
+        const Vector3 row(int index) const;
+        Vector3 &row(int index);
         const Vector3 col(const int index) const;
         Vector3 col(const int index);
 
