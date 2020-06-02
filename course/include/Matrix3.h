@@ -19,7 +19,9 @@ namespace ekumen
         const Vector3 row(int index) const;
         Vector3 &row(int index);
         const Vector3 col(const int index) const;
-        Vector3 col(const int index);
+
+        Matrix3 mul(const Matrix3 &m1, const Matrix3 &m2) const;
+        Matrix3 inverse() const;
 
         Matrix3 &operator+=(const Matrix3 &q);
         Matrix3 &operator-=(const Matrix3 &q);
@@ -35,7 +37,10 @@ namespace ekumen
         friend Matrix3 operator*(const double &cte, const Matrix3 &p);
         friend Matrix3 operator*(const Matrix3 &p, const double &cte);
         friend Matrix3 operator*(const Matrix3 &p, const Matrix3 &q);
+        friend Vector3 operator*(const Matrix3 &p, const Vector3 &v);
+
         friend Matrix3 operator/(const Matrix3 &p, const Matrix3 &q);
+        friend Matrix3 operator/(const Matrix3 &p, const double &value);
 
         friend bool operator!=(const Matrix3 &p, const Matrix3 &q);
         friend bool operator!=(const Matrix3 &p, const std::initializer_list<double> &list);

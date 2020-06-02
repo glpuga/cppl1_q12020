@@ -34,7 +34,6 @@ namespace ekumen
     private:
         Vector3 vector3_isometry;
         Matrix3 matrix3_isometry;
-        //double v_row3_isometry[4];
     };
 
 } // namespace ekumen

@@ -110,6 +110,11 @@ GTEST_TEST(Matrix3Test, Matrix3Operations)
   EXPECT_EQ(m1 * m2, std::initializer_list<double>({1., 4., 9., 16., 25., 36., 49., 64., 81.}));
   EXPECT_EQ(m1 / m2, Matrix3::kOnes);
   EXPECT_NEAR(m1.det(), 0., kTolerance);
+  
+  EXPECT_EQ(m1.mul(m1, m2), std::initializer_list<double>({30., 36., 42., 66., 81., 96., 102., 126., 150.}));
+  const Matrix3 m4{1., 2., 3., 2., 2., 1., 1., 1., 1.};
+  EXPECT_EQ(m4.inverse(), std::initializer_list<double>({-1., -1., 4., 1., 2., -5., 0., -1., 2.}));
+
   m1[2][2] = 10.;
   EXPECT_NEAR(m1.det(), -2.9999999999999996, kTolerance);
   std::stringstream ss;
@@ -136,7 +141,7 @@ GTEST_TEST(Matrix3Test, Matrix3Operations)
   {
     bool found{false};
     for (int i = 0; i < 3; ++i)
-    {        
+    {
       if (c == m2.col(i))
       {
         found = true;
@@ -183,9 +188,9 @@ GTEST_TEST(IsometryTest, IsometryOperations)
 }
 
 } // namespace
-} // namespace test
-} // namespace cppcourse
-} // namespace math
+}   // namespace test
+}     // namespace cppcourse
+}       // namespace math
 } // namespace ekumen
 
 int main(int argc, char **argv)

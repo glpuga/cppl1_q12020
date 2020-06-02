@@ -34,8 +34,8 @@ namespace ekumen
     {
         if (list.size() == 3)
         {
-                Isometry I(Vector3(list), Matrix3::kIdentity);
-                return I;
+            Isometry I(Vector3(list), Matrix3::kIdentity);
+            return I;
         }
 
         return Isometry();
@@ -48,21 +48,19 @@ namespace ekumen
 
     Isometry Isometry::RotateAround(const Vector3 &v, const double &a)
     {
-        Isometry I1;
-        if (v == Vector3::kUnitX)
-        {
-            I1.matrix3_isometry = {{1., 0., 0.}, {0., cos(a), -sin(a)}, {0, sin(a), cos(a)}};
-        }
-        else if (v == Vector3::kUnitY)
-        {
-            I1.matrix3_isometry = {{cos(a), 0., sin(a)}, {0., 1., 0.}, {-sin(a), 0, cos(a)}};
-        }
-        else if (v == Vector3::kUnitZ)
-        {
-            I1.matrix3_isometry = {{cos(a), -sin(a), 0}, {sin(a), cos(a), 0}, {0., 0., 1.}};
-        }
+        Matrix3 m;
+        double co = cos(a);
+        double s = sin(a);
+        double C = 1. - co;
+        double x = v.x();
+        double y = v.y();
+        double z = v.z();
 
-        return I1;
+        m.row(0) = Vector3(x * x * C + co, x * y * C - z * s, x * z * C + y * s);
+        m.row(1) = Vector3(y * x * C + z * s, y * y * C + co, y * z * C - x * s);
+        m.row(2) = Vector3(z * x * C - y * s, z * y * C + x * s, z * z * C + co);
+
+        return Isometry(Vector3(), m);
     }
 
     Vector3 Isometry::translation() const
@@ -110,22 +108,17 @@ namespace ekumen
     {
         if (list.size() == 3)
         {
-            try
-            {
-                return ((*this) * Vector3(list));
-            }
-            catch (const std::exception &ex)
-            {
-                std::cerr << "Error occurred: " << ex.what() << std::endl;
-            }
+            return ((*this) * Vector3(list));
         }
-
         return Vector3();
     }
 
-    Isometry Isometry::inverse(void) const
+    Isometry Isometry::inverse() const
     {
-        return Isometry(vector3_isometry * (-1), matrix3_isometry);
+        Matrix3 m = matrix3_isometry.inverse();
+        Vector3 v = m * vector3_isometry * (-1);
+
+        return Isometry(v, m);
     }
 
     Isometry Isometry::compose(const Isometry &I1) const
@@ -160,23 +153,9 @@ namespace ekumen
 
     Isometry operator*(const Isometry &i, const Isometry &i2)
     {
-        Isometry m;
-        Matrix3 p = i.matrix3_isometry;
-        Matrix3 q = i2.matrix3_isometry;
-
-        Vector3 a, b;
-
-        for (size_t i = 0; i < 3; ++i)
-        {
-            a = p.row(i);
-            for (size_t j = 0; j < 3; ++j)
-            {
-                b = q.col(j);
-                m.matrix3_isometry[i][j] = a.dot(b);
-            }
-        }
-        m.vector3_isometry = i.vector3_isometry + i2.vector3_isometry;
-        return m;
+        Matrix3 m1 = m1.mul(i.matrix3_isometry, i2.matrix3_isometry);
+        Vector3 v1 = i * i2.vector3_isometry;
+        return Isometry(v1, m1);
     }
 
     std::ostream &operator<<(std::ostream &os, const Isometry &p)

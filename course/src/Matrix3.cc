@@ -23,14 +23,14 @@ namespace ekumen
         if (list.size() == 9)
         {
             for (const auto &v : list)
+            {
+                row_values[i][j] = v;
+                if (j++ == 2)
                 {
-                    row_values[i][j] = v;
-                    if (j++ == 2)
-                    {
-                        ++i;
-                        j = 0;
-                    }
+                    ++i;
+                    j = 0;
                 }
+            }
         }
     }
 
@@ -39,7 +39,6 @@ namespace ekumen
         row(0) = Vector3(r0);
         row(1) = Vector3(r1);
         row(2) = Vector3(r2);
-        
     }
 
     Matrix3::Matrix3(const Matrix3 &m)
@@ -58,7 +57,7 @@ namespace ekumen
 
     const Vector3 Matrix3::row(int index) const
     {
-        if ((index >= 0)&&(index < 3))
+        if ((index >= 0) && (index < 3))
             return row_values[index];
         else
             return Vector3();
@@ -66,33 +65,21 @@ namespace ekumen
 
     Vector3 &Matrix3::row(int index)
     {
-        if ((index >= 0)&&(index < 3))
+        if ((index >= 0) && (index < 3))
             return row_values[index];
         else
             return row_values[0];
-        
     }
 
     const Vector3 Matrix3::col(const int index) const
     {
 
-            if ((index >= 0)&&(index < 3))
-            {
-                Vector3 p(row_values[0][index], row_values[1][index], row_values[2][index]);
-                return p;
-            }
+        if ((index >= 0) && (index < 3))
+        {
+            Vector3 p(row_values[0][index], row_values[1][index], row_values[2][index]);
+            return p;
+        }
 
-
-        return Vector3();
-    }
-
-    Vector3 Matrix3::col(const int index)
-    {
-            if ((index >= 0)&&(index < 3))
-            {
-                Vector3 p(row_values[0][index], row_values[1][index], row_values[2][index]);
-                return p;
-            }
         return Vector3();
     }
 
@@ -100,7 +87,7 @@ namespace ekumen
     {
         try
         {
-            if ((index >= 0)&&(index < 3))
+            if ((index >= 0) && (index < 3))
             {
                 return row_values[index];
             }
@@ -116,7 +103,7 @@ namespace ekumen
     {
         try
         {
-            if ((index >= 0)&&(index < 3))
+            if ((index >= 0) && (index < 3))
             {
                 return row(index);
             }
@@ -158,6 +145,36 @@ namespace ekumen
         return r;
     }
 
+    Matrix3 Matrix3::mul(const Matrix3 &m1, const Matrix3 &m2) const
+    {
+        Vector3 a, b;
+        Matrix3 r;
+        for (size_t i = 0; i < 3; ++i)
+        {
+            a = m1.row(i);
+            for (size_t j = 0; j < 3; ++j)
+            {
+                b = m2.col(j);
+                r[i][j] = a.dot(b);
+            }
+        }
+        return r;
+    }
+
+    Matrix3 Matrix3::inverse() const
+    {
+        Matrix3 m;
+        m.row(0) = row(1).cross(row(2));
+        m.row(1) = (-1) * (row(0).cross(row(2)));
+        m.row(2) = row(0).cross(row(1));
+        Matrix3 n;
+        for (size_t i = 0; i < 3; ++i)
+        {
+            for (size_t j = 0; j < 3; ++j)
+                n[i][j] = m[j][i];
+        }
+        return (n / det());
+    }
     bool operator==(const Matrix3 &p, const Matrix3 &q)
     {
         bool row0 = (p.row(0) == q.row(0));
@@ -198,6 +215,17 @@ namespace ekumen
         return res;
     }
 
+    Vector3 operator*(const Matrix3 &p, const Vector3 &v)
+    {
+
+        Vector3 r;
+        r.x() = p.row(0).dot(v);
+        r.y() = p.row(1).dot(v);
+        r.z() = p.row(2).dot(v);
+
+        return (r);
+    }
+
     Matrix3 operator/(const Matrix3 &p, const Matrix3 &q)
     {
         Matrix3 res;
@@ -206,6 +234,12 @@ namespace ekumen
             res.row(i) = p.row(i) / q.row(i);
         }
         return res;
+    }
+
+    Matrix3 operator/(const Matrix3 &p, const double &value)
+    {
+        double v = 1. / value;
+        return v * p;
     }
 
     bool operator!=(const Matrix3 &p, const Matrix3 &q)
