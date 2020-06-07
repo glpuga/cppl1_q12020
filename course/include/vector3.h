@@ -23,7 +23,9 @@ class Vector3 {
   static const Vector3 kZero;
 
   Vector3(double x = 0, double y = 0, double z = 0);
+  Vector3(const Vector3& obj);
   Vector3(std::initializer_list<double> vector);
+  Vector3& operator=(const Vector3& obj);
 
   // Member to member addition. Sums the corresponding components of two
   // vectors.

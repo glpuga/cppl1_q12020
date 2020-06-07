@@ -20,6 +20,8 @@ const Vector3 Vector3::kZero = Vector3(0, 0, 0);
 
 Vector3::Vector3(double x, double y, double z) : x_(x), y_(y), z_(z) {}
 
+Vector3::Vector3(const Vector3& obj) : Vector3(obj.x(), obj.y(), obj.z()) {}
+
 Vector3::Vector3(std::initializer_list<double> vector) {
   if (vector.size() != 3) {
     throw std::invalid_argument("Initializer list must be of size 3.");
@@ -28,6 +30,12 @@ Vector3::Vector3(std::initializer_list<double> vector) {
   x_ = *p;
   y_ = *(p + 1);
   z_ = *(p + 2);
+}
+
+Vector3& Vector3::operator=(const Vector3& obj) {
+  x_ = obj.x();
+  y_ = obj.y();
+  z_ = obj.z();
 }
 
 Vector3 Vector3::operator+(const Vector3& obj) const {
