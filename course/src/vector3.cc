@@ -8,9 +8,9 @@ namespace ekumen {
 namespace math {
 namespace {
 constexpr double square(double x) { return x * x; }
-constexpr int kXIndex = 0;
-constexpr int kYIndex = 1;
-constexpr int kZIndex = 2;
+constexpr auto kXIndex = 0;
+constexpr auto kYIndex = 1;
+constexpr auto kZIndex = 2;
 }  // namespace
 
 const Vector3 Vector3::kUnitX = Vector3(1, 0, 0);
@@ -26,7 +26,7 @@ Vector3::Vector3(std::initializer_list<double> vector) {
   if (vector.size() != 3) {
     throw std::invalid_argument("Initializer list must be of size 3.");
   }
-  const double* p = vector.begin();
+  const auto p = vector.begin();
   x_ = *p;
   y_ = *(p + 1);
   z_ = *(p + 2);
@@ -108,9 +108,9 @@ double Vector3::dot(const Vector3& obj) const {
 }
 
 Vector3 Vector3::cross(const Vector3& obj) const {
-  double res_x = this->y_ * obj.z() - this->z_ * obj.y();
-  double res_y = this->z_ * obj.x() - this->x_ * obj.z();
-  double res_z = this->x_ * obj.y() - this->y_ * obj.x();
+  auto res_x = this->y_ * obj.z() - this->z_ * obj.y();
+  auto res_y = this->z_ * obj.x() - this->x_ * obj.z();
+  auto res_z = this->x_ * obj.y() - this->y_ * obj.x();
   return Vector3(res_x, res_y, res_z);
 }
 
