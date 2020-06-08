@@ -55,7 +55,7 @@ namespace ekumen
         return (i.x() * j.x() + i.y() * j.y() + i.z() * j.z());
     }
 
-    const Vector3 Matrix3::row(int index) const
+    const Vector3 Matrix3::row(const int index) const
     {
         if ((index >= 0) && (index < 3))
             return row_values[index];
@@ -63,7 +63,7 @@ namespace ekumen
             return Vector3();
     }
 
-    Vector3 &Matrix3::row(int index)
+    Vector3 &Matrix3::row(const int index)
     {
         if ((index >= 0) && (index < 3))
             return row_values[index];
@@ -145,17 +145,14 @@ namespace ekumen
         return r;
     }
 
-    Matrix3 Matrix3::mul(const Matrix3 &m1, const Matrix3 &m2) const
+    Matrix3 Matrix3::mul(const Matrix3 &m2) const
     {
-        Vector3 a, b;
         Matrix3 r;
         for (size_t i = 0; i < 3; ++i)
         {
-            a = m1.row(i);
             for (size_t j = 0; j < 3; ++j)
             {
-                b = m2.col(j);
-                r[i][j] = a.dot(b);
+                r[i][j] = row(i).dot(m2.col(j));
             }
         }
         return r;

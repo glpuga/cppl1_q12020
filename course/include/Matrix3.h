@@ -16,11 +16,11 @@ namespace ekumen
         Matrix3(const Matrix3 &m);
 
         double det() const;
-        const Vector3 row(int index) const;
-        Vector3 &row(int index);
+        const Vector3 row(const int index) const;
+        Vector3 &row(const int index);
         const Vector3 col(const int index) const;
 
-        Matrix3 mul(const Matrix3 &m1, const Matrix3 &m2) const;
+        Matrix3 mul(const Matrix3 &m2) const;
         Matrix3 inverse() const;
 
         Matrix3 &operator+=(const Matrix3 &q);

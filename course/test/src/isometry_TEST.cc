@@ -111,7 +111,7 @@ GTEST_TEST(Matrix3Test, Matrix3Operations)
   EXPECT_EQ(m1 / m2, Matrix3::kOnes);
   EXPECT_NEAR(m1.det(), 0., kTolerance);
   
-  EXPECT_EQ(m1.mul(m1, m2), std::initializer_list<double>({30., 36., 42., 66., 81., 96., 102., 126., 150.}));
+  EXPECT_EQ(m1.mul(m2), std::initializer_list<double>({30., 36., 42., 66., 81., 96., 102., 126., 150.}));
   const Matrix3 m4{1., 2., 3., 2., 2., 1., 1., 1., 1.};
   EXPECT_EQ(m4.inverse(), std::initializer_list<double>({-1., -1., 4., 1., 2., -5., 0., -1., 2.}));
 

@@ -4,41 +4,51 @@ namespace ekumen
 {
 
     Vector3::Vector3(const double x, const double y, const double z)
-    {
-        values = std::shared_ptr<double[]>(new double[3]);
+    { 
+        values = new double[3];        
         values[0] = x;
         values[1] = y;
         values[2] = z;
     }
 
     Vector3::Vector3()
-    {
-        values = std::shared_ptr<double[]>(new double[3]);
+    {   
+        values = new double[3];
         values[0] = 0.;
         values[1] = 0.;
         values[2] = 0.;
     }
 
     Vector3::Vector3(const std::initializer_list<double> &list)
-    {
-        values = std::shared_ptr<double[]>(new double[3]);
+    {   
+        values = new double[3];
         if (list.size() == 3)
         {
-            auto i = 0;
+            auto i = 0;            
             for (const auto &v : list)
-            {
-                values[i] = v;
+            {   
+                values[i] = v;                
                 ++i;
             }
+            
         }
     }
 
     Vector3::Vector3(const Vector3 &p2)
-    {
-        values = std::shared_ptr<double[]>(new double[3]);
+    {   
+        values = new double[3];
         x() = p2.x();
         y() = p2.y();
         z() = p2.z();
+    }
+
+    Vector3::Vector3(Vector3&& other) {
+        values = other.values;
+        other.values = nullptr;
+    }
+    
+    Vector3::~Vector3(){
+        delete[] values;
     }
 
     double Vector3::norm() const
@@ -75,13 +85,26 @@ namespace ekumen
         return *this;
     }
 
-    Vector3 &Vector3::operator=(const Vector3 &other)
-    {
+    Vector3 &Vector3::operator=(const Vector3 &other){
         values[0] = other.x();
         values[1] = other.y();
         values[2] = other.z();
         return *this;
     }
+  
+    Vector3 &Vector3::operator=(Vector3 &&other){        
+        if (&other != this) {
+            delete[] values;
+            values = new double[3];
+            values[0] = other.x(); 
+            values[1] = other.y();
+            values[2] = other.z();
+            other.values = nullptr;
+
+        }
+        return *this;
+    }
+    
 
     Vector3 operator+(const Vector3 &p, const Vector3 &q)
     {
@@ -163,7 +186,7 @@ namespace ekumen
 
     const double &Vector3::operator[](const int index) const
     {
-        if ((index >= 0) && (index < 3))
+        if ((index >= 0)&&(index < 3))
         {
             return values[index];
         }
@@ -172,7 +195,7 @@ namespace ekumen
 
     double &Vector3::operator[](const int index)
     {
-        if ((index >= 0) && (index < 3))
+        if ((index >= 0)&&(index < 3))
         {
             return values[index];
         }

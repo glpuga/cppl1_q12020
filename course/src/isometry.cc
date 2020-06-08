@@ -151,10 +151,10 @@ namespace ekumen
         return Vector3(rx, ry, rz);
     }
 
-    Isometry operator*(const Isometry &i, const Isometry &i2)
+    Isometry operator*(const Isometry &i1, const Isometry &i2)
     {
-        Matrix3 m1 = m1.mul(i.matrix3_isometry, i2.matrix3_isometry);
-        Vector3 v1 = i * i2.vector3_isometry;
+        Matrix3 m1{i1.matrix3_isometry.mul(i2.matrix3_isometry)};
+        Vector3 v1 = i1 * i2.vector3_isometry;
         return Isometry(v1, m1);
     }
 

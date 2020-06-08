@@ -13,8 +13,10 @@ namespace ekumen
         Vector3();
         explicit Vector3(const double x, const double y, const double z);
         Vector3(const std::initializer_list<double> &list);
-        Vector3(const Vector3 &p2);
-
+        Vector3(const Vector3 &p2);     //copy constructor
+        Vector3(Vector3&& other);       //move constructor
+        ~Vector3();
+        
         const double &x() const { return values[0]; }
         double &x() { return values[0]; }
 
@@ -33,7 +35,8 @@ namespace ekumen
 
         Vector3 &operator+=(const Vector3 &q);
         Vector3 &operator-=(const Vector3 &q);
-        Vector3 &operator=(const Vector3 &r); // copy assignment
+        Vector3 &operator=(const Vector3 &r);   // copy assignment
+        Vector3 &operator=(Vector3 &&other);    //move assignment
 
         friend Vector3 operator*(const double &cte, const Vector3 &p);
         friend Vector3 operator*(const Vector3 &p, const double &cte);
@@ -56,8 +59,10 @@ namespace ekumen
         static const Vector3 kZero;
         static const Vector3 kOnes;
 
-    private:
-        std::shared_ptr<double[]> values;
+    private:        
+        double *values;
+        
+
     };
 
     Vector3 operator+(const Vector3 &p, const Vector3 &q);
