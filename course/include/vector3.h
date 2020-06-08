@@ -1,8 +1,9 @@
-#ifndef VECTORTRES_H
-#define VECTORTRES_H
+#ifndef VECTOR3_H
+#define VECTOR3_H
 
 #include <initializer_list>
 #include <iostream>
+#include <vector>
 
 namespace ekumen {
 namespace math {
@@ -22,22 +23,22 @@ class Vector3 {
   // Zero-filled vector.
   static const Vector3 kZero;
 
-  Vector3(double x = 0, double y = 0, double z = 0);
+  Vector3(const double& x = 0, const double& y = 0, const double& z = 0);
   Vector3(const Vector3& obj);
   Vector3(std::initializer_list<double> vector);
   Vector3& operator=(const Vector3& obj);
 
   // Member to member addition. Sums the corresponding components of two
   // vectors.
-  Vector3 operator+(const Vector3& ojb) const;
+  Vector3 operator+(const Vector3& obj) const;
 
   // Member to member substraction. Substracts the corresponding components of
   // two vectors.
-  Vector3 operator-(const Vector3& ojb) const;
+  Vector3 operator-(const Vector3& obj) const;
 
   // Member to member product. Multiplies the corresponding components of two
   // vectors.
-  Vector3 operator*(const Vector3& ojb) const;
+  Vector3 operator*(const Vector3& obj) const;
 
   // Scales the vector to a factor.
   Vector3 operator*(const double& factor) const;
@@ -47,7 +48,7 @@ class Vector3 {
 
   // Member to member division. Divides the corresponding components of two
   // vectors.
-  Vector3 operator/(const Vector3& ojb) const;
+  Vector3 operator/(const Vector3& obj) const;
 
   // Scales the vector dividing it by a factor.
   Vector3 operator/(const double& factor) const;
@@ -59,6 +60,8 @@ class Vector3 {
   // axis.
   const double& operator[](int index) const;
   double& operator[](int index);
+
+  // Serializes the vector to a stream with the format: '(x: a, y: b, z: c)'.
   friend std::ostream& operator<<(std::ostream& os, const Vector3& obj);
 
   const double& x() const;
@@ -78,9 +81,7 @@ class Vector3 {
   Vector3 cross(const Vector3& obj) const;
 
  private:
-  double x_;
-  double y_;
-  double z_;
+  std::vector<double> elem_;
 };
 
 }  // namespace math

@@ -9,8 +9,10 @@ namespace {
 constexpr double kTolerance{1e-12};
 }  // namespace
 
+const Vector3 p(1., 2., 3.);
+const Vector3 q{4., 5., 6.};
+
 GTEST_TEST(Vector3Test, Accessors) {
-  const Vector3 p(1., 2., 3.);
   EXPECT_EQ(p.x(), 1);
   EXPECT_EQ(p.y(), 2);
   EXPECT_EQ(p.z(), 3);
@@ -26,14 +28,10 @@ GTEST_TEST(Vector3Test, Accessors) {
 }
 
 GTEST_TEST(Vector3Test, AccesorOutOfRange) {
-  const Vector3 p(1, 2, 3);
   ASSERT_THROW(p[5], std::invalid_argument);
-  ASSERT_THROW(p[-2], std::invalid_argument);
 }
 
 GTEST_TEST(Vector3Test, Operations) {
-  const Vector3 p(1., 2., 3.);
-  const Vector3 q(4., 5., 6.);
   EXPECT_EQ(p + q, ((std::initializer_list<double>){5., 7., 9.}));
   EXPECT_EQ(p - q, ((std::initializer_list<double>){-3., -3., -3.}));
   EXPECT_EQ(p * 2., Vector3(2., 4., 6));
@@ -46,13 +44,11 @@ GTEST_TEST(Vector3Test, Operations) {
 }
 
 GTEST_TEST(Vector3Test, Norm) {
-  const Vector3 p(1., 2., 3.);
   EXPECT_NEAR(p.norm(), 3.7416573867739413, kTolerance);
 }
 
 GTEST_TEST(Vector3Test, Serialize) {
   std::stringstream ss;
-  const Vector3 p(1., 2., 3.);
   ss << p;
   EXPECT_EQ(ss.str(), "(x: 1, y: 2, z: 3)");
 }
@@ -68,17 +64,15 @@ GTEST_TEST(Vector3Test, StaticConstMembers) {
 }
 
 GTEST_TEST(Vector3Test, DotProduct) {
-  const Vector3 p(1., 2., 3.);
-  const Vector3 q(3., 2., 1.);
-  EXPECT_NEAR(p.dot(q), 10, kTolerance);
+  const Vector3 r(3., 2., 1.);
+  EXPECT_NEAR(p.dot(r), 10, kTolerance);
   EXPECT_NEAR(Vector3::kUnitX.dot(Vector3::kUnitZ), 0., kTolerance);
 }
 
 GTEST_TEST(Vector3Test, CrossProduct) {
-  const Vector3 p(1., 2., 3.);
-  const Vector3 q(3., 2., 1.);
+  const Vector3 r(3., 2., 1.);
   const Vector3 expected_res(-4, 8, -4);
-  EXPECT_TRUE(p.cross(q) == expected_res);
+  EXPECT_TRUE(p.cross(r) == expected_res);
   EXPECT_TRUE(Vector3::kUnitZ == Vector3::kUnitX.cross(Vector3::kUnitY));
 }
 
