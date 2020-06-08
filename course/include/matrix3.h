@@ -7,6 +7,8 @@
 namespace ekumen {
 namespace math {
 
+// TODO(devitturi): add special member functions to this class.
+// TODO(devitturi): add a matrix-product method.
 // Represents a 3x3 matrix in the real-domain.
 class Matrix3 {
  public:
