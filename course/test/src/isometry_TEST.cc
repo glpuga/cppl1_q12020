@@ -188,9 +188,9 @@ GTEST_TEST(IsometryTest, IsometryOperations)
 }
 
 } // namespace
-}   // namespace test
-}     // namespace cppcourse
-}       // namespace math
+} // namespace test
+} // namespace cppcourse
+} // namespace math
 } // namespace ekumen
 
 int main(int argc, char **argv)

@@ -14,6 +14,7 @@ namespace ekumen
         Matrix3(const std::initializer_list<double> &list);
         Matrix3(const std::initializer_list<double> &r1, const std::initializer_list<double> &r2, const std::initializer_list<double> &r3);
         Matrix3(const Matrix3 &m);
+        Matrix3(Matrix3 &&m);
 
         double det() const;
         const Vector3 row(const int index) const;
@@ -25,6 +26,9 @@ namespace ekumen
 
         Matrix3 &operator+=(const Matrix3 &q);
         Matrix3 &operator-=(const Matrix3 &q);
+        
+        Matrix3 &operator=(const Matrix3 &other);   // copy assignment
+        Matrix3 &operator=(Matrix3 &&other);    //move assignment
 
         //operator overload
         const Vector3 &operator[](const int &index) const;
@@ -52,7 +56,7 @@ namespace ekumen
         static const Matrix3 kOnes;
 
     private:
-        Vector3 row_values[3];
+        Vector3 *row_values = new Vector3[3];
     };
 
     Matrix3 operator+(const Matrix3 &p, const Matrix3 &q);

@@ -95,10 +95,7 @@ namespace ekumen
     Vector3 &Vector3::operator=(Vector3 &&other){        
         if (&other != this) {
             delete[] values;
-            values = new double[3];
-            values[0] = other.x(); 
-            values[1] = other.y();
-            values[2] = other.z();
+            values = other.values;
             other.values = nullptr;
 
         }

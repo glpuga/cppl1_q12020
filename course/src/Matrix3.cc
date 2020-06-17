@@ -48,6 +48,12 @@ namespace ekumen
         row(2) = m.row(2);
     }
 
+    Matrix3::Matrix3(Matrix3 &&m) {
+        row_values[0] = std::move(m.row_values[0]);
+        row_values[1] = std::move(m.row_values[1]);
+        row_values[2] = std::move(m.row_values[2]);
+    }
+
     double Matrix3::det() const
     {
         const Vector3 &i = row(0);
@@ -129,6 +135,23 @@ namespace ekumen
         row(1) -= q.row(1);
         row(2) -= q.row(2);
         return *this;
+    }
+
+    Matrix3 &Matrix3::operator=(const Matrix3 &other){
+        row(0) = other.row(0);
+        row(1) = other.row(1);
+        row(2) = other.row(2);
+        return *this;
+    }
+    Matrix3 &Matrix3::operator=(Matrix3 &&other){
+        if (&other != this) {
+            delete[] row_values;
+            row_values[0] = other.row_values[0];
+            row_values[1] = other.row_values[1];
+            row_values[2] = other.row_values[2];
+            other.row_values = nullptr;
+
+        }
     }
 
     Matrix3 operator+(const Matrix3 &p, const Matrix3 &q)
