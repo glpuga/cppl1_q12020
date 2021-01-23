@@ -6,7 +6,7 @@ IMAGE_NAME=cppcourse-image
 SCRIPTS_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 REPO_DIR=`readlink -f ${SCRIPTS_DIR}/../`
 
-DOCKER_MOUNT_ARGS="-v ${REPO_DIR}/course:/course"
+DOCKER_MOUNT_ARGS="-v ${REPO_DIR}/:/course"
 
 xhost +
 docker run --name ${IMAGE_NAME} --privileged --rm \
