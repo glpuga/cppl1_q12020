@@ -25,7 +25,8 @@ RUN apt-get update && apt-get install -y \
 	clang-format \
 	clang-tidy \
 	python3-pip \
-	cppcheck
+	cppcheck \
+	ccache
 
 RUN pip3 install cpplint
 
